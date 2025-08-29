@@ -6,6 +6,9 @@
 package rs.etf.dz1.sprites;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -15,8 +18,11 @@ import javafx.scene.shape.Rectangle;
 public class Background extends Sprite {
 
     public Background(int width, int height) {
+        Stop[] stops = new Stop[] { new Stop(0, Color.LIGHTBLUE), new Stop(1, Color.DEEPSKYBLUE)};
+        LinearGradient gradient = new LinearGradient(0, 0, 0, height, false, CycleMethod.NO_CYCLE, stops);
+
         Rectangle bg = new Rectangle(0, 0, width, height);
-        bg.setFill(Color.SKYBLUE);
+        bg.setFill(gradient);
         getChildren().add(bg);
     }
 }
