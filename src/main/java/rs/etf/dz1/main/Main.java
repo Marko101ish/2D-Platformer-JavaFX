@@ -5,6 +5,7 @@ package rs.etf.dz1.main;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.animation.AnimationTimer;
@@ -14,10 +15,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import rs.etf.dz1.cameras.Camera;
-import rs.etf.dz1.sprites.Background;
-import rs.etf.dz1.sprites.Enemy;
-import rs.etf.dz1.sprites.Floor;
-import rs.etf.dz1.sprites.Player;
+import rs.etf.dz1.sprites.*;
 
 /**
  *
@@ -41,13 +39,17 @@ public class Main extends Application {
     public static final double CLOUD_SPAWN_COOLDOWN_MS = 1500.0;
     public static final double CLOUD_SPAWN_INITIAL_COOLDOWN_MS = 250.0;
 
+    public static final Duration TIME_TO_LIVE = Duration.ofSeconds(60);
+
     private Background background;
     private Player player;
     private List<Enemy> enemies;
+    private UI ui;
 
     private static Main instance;
     
-    private double time = 0; // game time in seconds
+    private long lastFrameNanoTime;
+    private Duration timeLeft = TIME_TO_LIVE;
 
     private Camera camera; // camera used for applying transformations
     
@@ -60,16 +62,12 @@ public class Main extends Application {
         return camera;
     }
     
-    public double getTime() {
-        return time;
-    }
-
-    
     // called once per frame to update game state
-    private void update() {
-        background.update();
-        player.update();
-        enemies.forEach(e -> e.update());
+    // deltaTime is in milliseconds here
+    private void update(long deltaTime) {
+        background.update(deltaTime);
+        player.update(deltaTime);
+        enemies.forEach(e -> e.update(deltaTime));
 
         // checking collision between player and enemies
         enemies.forEach(e -> {
@@ -77,7 +75,17 @@ public class Main extends Application {
                 player.takeHit();
             }
         });
-        time += 1. / 60;
+
+        timeLeft = timeLeft.minus(Duration.ofMillis((long)deltaTime));
+
+        // When there's no time left the game closes automatically
+        if(timeLeft.isNegative())
+        {
+            System.exit(0);
+        }
+
+        ui.setTimeLeft(timeLeft);
+        ui.update(deltaTime);
     }
 
     @Override
@@ -110,9 +118,12 @@ public class Main extends Application {
         player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2);
         sprites.getChildren().add(player);
 
+        ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE);
+
         Group root = new Group();
         root.getChildren().add(background);
         root.getChildren().add(camera);
+        root.getChildren().add(ui);
 
         Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         scene.setOnKeyPressed(player);
@@ -122,11 +133,17 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setResizable(false);
 
+        this.lastFrameNanoTime = System.nanoTime();
+
         // calling update once every frame
         new AnimationTimer() {
             @Override
             public void handle(long currentNanoTime) {
-                update();
+                // Delta time is in milliseconds
+                long deltaTime = Duration.ofNanos(currentNanoTime - lastFrameNanoTime).toMillis();
+                lastFrameNanoTime = currentNanoTime;
+
+                update(deltaTime);
             }
         }.start();
     }

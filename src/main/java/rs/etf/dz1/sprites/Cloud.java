@@ -38,7 +38,7 @@ public class Cloud extends Sprite {
     }
 
     @Override
-    public void update() {
+    public void update(long deltaTime) {
         setTranslateX(getTranslateX() - velocity);
     }
 }

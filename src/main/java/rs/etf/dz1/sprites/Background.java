@@ -56,9 +56,8 @@ public class Background extends Sprite {
     }
 
     @Override
-    public void update() {
-        double deltaTimeMS = 1000.0/60;
-        cloudSpawnTimer -= deltaTimeMS;
+    public void update(long deltaTime) {
+        cloudSpawnTimer -= deltaTime;
         if (cloudSpawnTimer <= 0) {
             cloudSpawnTimer = cloudSpawnCooldownMS;
             spawnCloud(cloudSpawnOutOfScreenX);
@@ -66,7 +65,7 @@ public class Background extends Sprite {
 
         removeOutOfBoundsClouds();
 
-        clouds.forEach(e -> e.update());
+        clouds.forEach(e -> e.update(deltaTime));
     }
 
     private double getRandomCloudHeight()
