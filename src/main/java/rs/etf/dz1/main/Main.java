@@ -7,6 +7,7 @@ package rs.etf.dz1.main;
  */
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -41,6 +42,7 @@ public class Main extends Application {
     private Background background;
     private Player player;
     private List<Enemy> enemies;
+    private List<Platform> platforms;
     private UI ui;
 
     private static Main instance;
@@ -65,6 +67,7 @@ public class Main extends Application {
         background.update(deltaTime);
         player.update(deltaTime);
         enemies.forEach(e -> e.update(deltaTime));
+        platforms.forEach(e->e.update(deltaTime));
 
         // checking collision between player and enemies
         enemies.forEach(e -> {
@@ -94,6 +97,7 @@ public class Main extends Application {
         instance = this;
         
         enemies = new LinkedList<>();
+        platforms = new LinkedList<>();
         background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
@@ -112,6 +116,17 @@ public class Main extends Application {
             enemy.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2);
             sprites.getChildren().add(enemy);
             enemies.add(enemy);
+        }
+
+        Random rand =  new Random();
+        // making 10 platforms and adding them to the scene
+        for (int j = 0; j < 10; j++) {
+            Platform platform = new Platform();
+            double platformHeight = rand.nextDouble() * (WINDOW_HEIGHT - 2 * ENEMY_HEIGHT) + ENEMY_HEIGHT;
+            platform.setTranslateX((1 + j) * 300);
+            platform.setTranslateY(platformHeight);
+            sprites.getChildren().add(platform);
+            platforms.add(platform);
         }
 
         player = new Player(camera);
