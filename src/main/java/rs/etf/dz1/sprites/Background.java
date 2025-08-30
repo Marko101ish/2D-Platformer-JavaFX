@@ -22,23 +22,20 @@ import java.util.Random;
  */
 public class Background extends Sprite {
     private final int INITIAL_NUMBER_OF_CLOUDS = 3;
+    private static final double CLOUD_SPEED = 400.0;
+    private static final double CLOUD_SPAWN_COOLDOWN = 1.5;
+    private static final double CLOUD_SPAWN_INITIAL_COOLDOWN = 0.250;
 
     private final int width;
     private final int height;
-    private final double cloudSpawnCooldown;
     private final double cloudSpawnOutOfScreenX;
-    private final double cloudSpeed;
 
     private List<Cloud> clouds;
-    private double cloudSpawnTimer;
+    private double cloudSpawnTimer = CLOUD_SPAWN_INITIAL_COOLDOWN;
 
-    public Background(int width, int height, double cloudSpeed, double cloudSpawnInitialCooldown, double cloudSpawnCooldown) {
+    public Background(int width, int height) {
         this.width = width;
         this.height = height;
-
-        this.cloudSpawnCooldown = cloudSpawnCooldown;
-        this.cloudSpawnTimer = cloudSpawnInitialCooldown;
-        this.cloudSpeed = cloudSpeed;
 
         this.cloudSpawnOutOfScreenX = width + 200.0;
 
@@ -62,7 +59,7 @@ public class Background extends Sprite {
     public void update(double deltaTime) {
         cloudSpawnTimer -= deltaTime;
         if (cloudSpawnTimer <= 0) {
-            cloudSpawnTimer = cloudSpawnCooldown;
+            cloudSpawnTimer = CLOUD_SPAWN_COOLDOWN;
             spawnCloud(cloudSpawnOutOfScreenX);
         }
 
@@ -92,7 +89,7 @@ public class Background extends Sprite {
     }
 
     private void spawnCloud(double spawnPosX) {
-        Cloud cloud = new Cloud(cloudSpeed);
+        Cloud cloud = new Cloud(CLOUD_SPEED);
 
         double spawnPosY = getRandomCloudHeight();
 

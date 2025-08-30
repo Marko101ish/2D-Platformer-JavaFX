@@ -35,9 +35,6 @@ public class Main extends Application {
     public static final String TITLE = "Platformer";
 
     public static final double ENEMY_SPEED = 200.0;
-    public static final double CLOUD_SPEED = 400.0;
-    public static final double CLOUD_SPAWN_COOLDOWN = 1.5;
-    public static final double CLOUD_SPAWN_INITIAL_COOLDOWN = 0.250;
 
     public static final double TIME_TO_LIVE_S = 60.0;
 
@@ -95,7 +92,7 @@ public class Main extends Application {
         instance = this;
         
         enemies = new LinkedList<>();
-        background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT, CLOUD_SPEED, CLOUD_SPAWN_INITIAL_COOLDOWN, CLOUD_SPAWN_COOLDOWN);
+        background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
         floor.setTranslateY(WINDOW_HEIGHT);
