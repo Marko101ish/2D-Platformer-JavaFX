@@ -72,7 +72,9 @@ public class Main extends Application {
         // checking collision between player and enemies
         enemies.forEach(e -> {
             if (player.getBoundsInParent().intersects(e.getBoundsInParent())) {
-                player.takeHit();
+                if (!player.isDead()) {
+                    player.takeHit();
+                }
             }
         });
 

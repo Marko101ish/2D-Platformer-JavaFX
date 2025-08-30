@@ -40,6 +40,8 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
     private Circle body;
     private Circle eye;
 
+    private boolean dead = false;
+
     public Player() {
         state = new IdleState(this);
         getChildren().clear();
@@ -89,6 +91,7 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
     }
 
     public void die() {
+        dead = true;
         state = new DeadState(this);
         body.setFill(DEAD_COLOR);
     }
@@ -99,6 +102,10 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
 
     public boolean isFaceLeft() {
         return !right;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 
     @Override
