@@ -83,6 +83,8 @@ public class Main extends Application {
             // System.exit(0);
         }
 
+        camera.update(deltaTime);
+
         ui.setTimeLeft(timeLeft);
         ui.update(deltaTime);
     }
@@ -97,7 +99,7 @@ public class Main extends Application {
         Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
         floor.setTranslateY(WINDOW_HEIGHT);
 
-        camera = new Camera();
+        camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
         camera.getChildren().add(floor);
 
         Group sprites = new Group();
@@ -112,7 +114,7 @@ public class Main extends Application {
             enemies.add(enemy);
         }
 
-        player = new Player();
+        player = new Player(camera);
         player.setTranslateX(100);
         player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2);
         sprites.getChildren().add(player);
