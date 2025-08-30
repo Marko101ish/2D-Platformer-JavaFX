@@ -36,8 +36,12 @@ public class Main extends Application {
 
     public static final String TITLE = "Platformer";
 
-    public static final double ENEMY_SPEED = 2.5f;
+    public static final double ENEMY_SPEED = 2.5;
+    public static final double CLOUD_SPEED = 5.0;
+    public static final double CLOUD_SPAWN_COOLDOWN_MS = 1500.0;
+    public static final double CLOUD_SPAWN_INITIAL_COOLDOWN_MS = 250.0;
 
+    private Background background;
     private Player player;
     private List<Enemy> enemies;
 
@@ -63,6 +67,7 @@ public class Main extends Application {
     
     // called once per frame to update game state
     private void update() {
+        background.update();
         player.update();
         enemies.forEach(e -> e.update());
 
@@ -80,7 +85,7 @@ public class Main extends Application {
         instance = this;
         
         enemies = new LinkedList<>();
-        Background bg = new Background(WINDOW_WIDTH, WINDOW_HEIGHT);
+        background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT, CLOUD_SPEED, CLOUD_SPAWN_INITIAL_COOLDOWN_MS, CLOUD_SPAWN_COOLDOWN_MS);
 
         Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
         floor.setTranslateY(WINDOW_HEIGHT);
@@ -106,7 +111,7 @@ public class Main extends Application {
         sprites.getChildren().add(player);
 
         Group root = new Group();
-        root.getChildren().add(bg);
+        root.getChildren().add(background);
         root.getChildren().add(camera);
 
         Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
