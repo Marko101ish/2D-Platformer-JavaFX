@@ -5,9 +5,9 @@ package rs.etf.dz1.main;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -34,12 +34,12 @@ public class Main extends Application {
 
     public static final String TITLE = "Platformer";
 
-    public static final double ENEMY_SPEED = 2.5;
-    public static final double CLOUD_SPEED = 5.0;
-    public static final double CLOUD_SPAWN_COOLDOWN_MS = 1500.0;
-    public static final double CLOUD_SPAWN_INITIAL_COOLDOWN_MS = 250.0;
+    public static final double ENEMY_SPEED = 200.0;
+    public static final double CLOUD_SPEED = 400.0;
+    public static final double CLOUD_SPAWN_COOLDOWN = 1.5;
+    public static final double CLOUD_SPAWN_INITIAL_COOLDOWN = 0.250;
 
-    public static final Duration TIME_TO_LIVE = Duration.ofSeconds(60);
+    public static final double TIME_TO_LIVE_S = 60.0;
 
     private Background background;
     private Player player;
@@ -49,7 +49,7 @@ public class Main extends Application {
     private static Main instance;
     
     private long lastFrameNanoTime;
-    private Duration timeLeft = TIME_TO_LIVE;
+    private double timeLeft = TIME_TO_LIVE_S;
 
     private Camera camera; // camera used for applying transformations
     
@@ -64,7 +64,7 @@ public class Main extends Application {
     
     // called once per frame to update game state
     // deltaTime is in milliseconds here
-    private void update(long deltaTime) {
+    private void update(double deltaTime) {
         background.update(deltaTime);
         player.update(deltaTime);
         enemies.forEach(e -> e.update(deltaTime));
@@ -76,12 +76,12 @@ public class Main extends Application {
             }
         });
 
-        timeLeft = timeLeft.minus(Duration.ofMillis((long)deltaTime));
+        timeLeft = timeLeft - deltaTime;
 
         // When there's no time left the game closes automatically
-        if(timeLeft.isNegative())
+        if(timeLeft < 0)
         {
-            System.exit(0);
+            // System.exit(0);
         }
 
         ui.setTimeLeft(timeLeft);
@@ -93,7 +93,7 @@ public class Main extends Application {
         instance = this;
         
         enemies = new LinkedList<>();
-        background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT, CLOUD_SPEED, CLOUD_SPAWN_INITIAL_COOLDOWN_MS, CLOUD_SPAWN_COOLDOWN_MS);
+        background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT, CLOUD_SPEED, CLOUD_SPAWN_INITIAL_COOLDOWN, CLOUD_SPAWN_COOLDOWN);
 
         Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
         floor.setTranslateY(WINDOW_HEIGHT);
@@ -118,7 +118,7 @@ public class Main extends Application {
         player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2);
         sprites.getChildren().add(player);
 
-        ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE);
+        ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE_S);
 
         Group root = new Group();
         root.getChildren().add(background);
@@ -139,11 +139,14 @@ public class Main extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long currentNanoTime) {
-                // Delta time is in milliseconds
-                long deltaTime = Duration.ofNanos(currentNanoTime - lastFrameNanoTime).toMillis();
+                // Delta time is in seconds
+                double deltaNanoTime = (double) (currentNanoTime - lastFrameNanoTime);
+                double deltaTime = deltaNanoTime / 1_000_000_000.0;;
                 lastFrameNanoTime = currentNanoTime;
 
-                update(deltaTime);
+                double fixedDeltaTime = 1./60.0;
+
+                update(fixedDeltaTime);
             }
         }.start();
     }

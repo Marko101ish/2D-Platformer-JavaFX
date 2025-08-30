@@ -25,17 +25,20 @@ public class Background extends Sprite {
 
     private final int width;
     private final int height;
-    private final double cloudSpawnCooldownMS;
+    private final double cloudSpawnCooldown;
     private final double cloudSpawnOutOfScreenX;
+    private final double cloudSpeed;
 
     private List<Cloud> clouds;
     private double cloudSpawnTimer;
 
-    public Background(int width, int height, double cloudSpeed, double cloudSpawnInitialCooldownMS, double cloudSpawnCooldownMS) {
+    public Background(int width, int height, double cloudSpeed, double cloudSpawnInitialCooldown, double cloudSpawnCooldown) {
         this.width = width;
         this.height = height;
-        this.cloudSpawnCooldownMS = cloudSpawnCooldownMS;
-        this.cloudSpawnTimer = cloudSpawnInitialCooldownMS;
+
+        this.cloudSpawnCooldown = cloudSpawnCooldown;
+        this.cloudSpawnTimer = cloudSpawnInitialCooldown;
+        this.cloudSpeed = cloudSpeed;
 
         this.cloudSpawnOutOfScreenX = width + 200.0;
 
@@ -56,10 +59,10 @@ public class Background extends Sprite {
     }
 
     @Override
-    public void update(long deltaTime) {
+    public void update(double deltaTime) {
         cloudSpawnTimer -= deltaTime;
         if (cloudSpawnTimer <= 0) {
-            cloudSpawnTimer = cloudSpawnCooldownMS;
+            cloudSpawnTimer = cloudSpawnCooldown;
             spawnCloud(cloudSpawnOutOfScreenX);
         }
 
@@ -89,7 +92,7 @@ public class Background extends Sprite {
     }
 
     private void spawnCloud(double spawnPosX) {
-        Cloud cloud = new Cloud(5.0);
+        Cloud cloud = new Cloud(cloudSpeed);
 
         double spawnPosY = getRandomCloudHeight();
 

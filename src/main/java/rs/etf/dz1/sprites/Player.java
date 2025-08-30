@@ -102,7 +102,7 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
     }
 
     @Override
-    public void update(long deltaTime) {
+    public void update(double deltaTime) {
         state.move();
     }
 

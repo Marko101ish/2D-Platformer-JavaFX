@@ -55,8 +55,7 @@ public class Enemy extends Sprite {
     }
 
     @Override
-    public void update(long deltaTime) {
-        setTranslateX(getTranslateX() - velocity);
+    public void update(double deltaTime) {
+        setTranslateX(getTranslateX() - velocity * deltaTime);
     }
-
 }

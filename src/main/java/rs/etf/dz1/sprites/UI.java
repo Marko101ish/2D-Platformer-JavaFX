@@ -18,10 +18,10 @@ import java.time.Duration;
 public class UI extends Sprite {
     private static final double MAX_FONT_SIZE = 20.0;
 
-    private Duration timeLeft;
+    private double timeLeft;
     private final Label gameTimeLabel;
 
-    public UI(int width, int height, Duration timeToLive) {
+    public UI(int width, int height, double timeToLive) {
         gameTimeLabel = new Label();
         gameTimeLabel.setTranslateX(width / 2.0);
         gameTimeLabel.setTranslateY(20);
@@ -32,19 +32,21 @@ public class UI extends Sprite {
         getChildren().add(this.gameTimeLabel);
     }
 
-    public void setTimeLeft(Duration timeLeft)
+    // timeLeft is in seconds
+    public void setTimeLeft(double timeLeft)
     {
         this.timeLeft = timeLeft;
     }
 
     @Override
-    public void update(long deltaTime) {
+    public void update(double deltaTime) {
         updateTimeLeft();
     }
 
     private void updateTimeLeft() {
-        int minutes = timeLeft.toMinutesPart();
-        int seconds = timeLeft.toSecondsPart();
+        Duration dur = Duration.ofSeconds((long)timeLeft);
+        int minutes = dur.toMinutesPart();
+        int seconds = dur.toSecondsPart();
 
         String formattedDuration = String.format("%02d:%02d", minutes, seconds);
         gameTimeLabel.setText("Time left: " + formattedDuration);

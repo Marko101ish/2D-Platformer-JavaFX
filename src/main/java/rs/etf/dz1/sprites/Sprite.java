@@ -14,11 +14,11 @@ import javafx.scene.Group;
 public abstract class Sprite extends Group {
     
     // method should be redefined and called in Main.update() method to update the object status
-    // deltaTime is in milliseconds
+    // deltaTime is in seconds
     //
     // when moving objects make sure to take deltaTime into account
     // so the simulation runs smoothly even with inconsistent frame rate
-    public void update(long deltaTime) {
+    public void update(double deltaTime) {
         
     }
     
