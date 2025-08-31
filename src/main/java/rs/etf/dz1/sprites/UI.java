@@ -8,6 +8,8 @@ package rs.etf.dz1.sprites;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
+import rs.etf.dz1.main.Main;
+import rs.etf.dz1.sprites.characters.Player;
 
 import java.time.Duration;
 
@@ -36,7 +38,7 @@ public class UI extends Sprite {
         fpsLabel.setFont(new Font(MAX_FONT_SIZE));
 
         getChildren().add(gameTimeLabel);
-        // getChildren().add(fpsLabel);
+        getChildren().add(fpsLabel);
     }
 
     // timeLeft is in seconds
@@ -49,7 +51,10 @@ public class UI extends Sprite {
     public void update(double deltaTime) {
         updateTimeLeft();
 
-        // fpsLabel.setText("FPS: " + 1./deltaTime);
+
+        Player player = Main.getInstance().getPlayer();
+        String formatVelocities = String.format("X: %02f, Y: %02f", player.getVelocityX(), player.getVelocityY());
+        fpsLabel.setText(formatVelocities);
     }
 
     private void updateTimeLeft() {

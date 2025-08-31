@@ -13,11 +13,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import rs.etf.dz1.main.Main;
-import rs.etf.dz1.sprites.characters.playerstates.DeadState;
-import rs.etf.dz1.sprites.characters.playerstates.IdleState;
-import rs.etf.dz1.sprites.characters.playerstates.JumpState;
-import rs.etf.dz1.sprites.characters.playerstates.RunState;
-import rs.etf.dz1.sprites.characters.playerstates.State;
+import rs.etf.dz1.sprites.Floor;
+import rs.etf.dz1.sprites.Platform;
+import rs.etf.dz1.sprites.characters.playerstates.*;
+import rs.etf.dz1.utils.collisions.CollisionHelper;
+import rs.etf.dz1.utils.collisions.CollisionResult;
 
 /**
  *
@@ -28,20 +28,21 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     private static final Paint IDLE_COLOR = Color.YELLOW;
     private static final Paint RUN_COLOR = Color.GREEN;
     private static final Paint JUMP_COLOR = Color.RED;
+    private static final Paint FALL_COLOR = Color.BLUE;
     private static final Paint DEAD_COLOR = Color.PURPLE;
 
     private static final Paint EYE_COLOR = Color.BLACK;
 
-    private static final double PLAYER_VELOCITY = 7.5f;
-
     private State state;
     private boolean right = true;
-    private double velocity = PLAYER_VELOCITY;
+    private double velocityX = 0;
+    private double velocityY = 0;
 
     private Circle body;
     private Circle eye;
 
     private boolean onGround = false;
+    private boolean falling = false;
 
     public Player() {
         state = new IdleState(this);
@@ -54,12 +55,24 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         getChildren().add(eye);
     }
 
-    public double getVelocity() {
+    public double getVelocityX() {
         if (isFaceRight()) {
-            return velocity;
+            return velocityX;
         } else {
-            return -velocity;
+            return -velocityX;
         }
+    }
+
+    public void setVelocityX(double velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public double getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(double velocityY) {
+        this.velocityY = velocityY;
     }
 
     public void run() {
@@ -86,9 +99,19 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         body.setFill(JUMP_COLOR);
     }
 
+    public void fall() {
+        state = new FallState(this);
+        body.setFill(FALL_COLOR);
+    }
+
     public void stop() {
-        state = new IdleState(this);
-        body.setFill(IDLE_COLOR);
+        if (getVelocityX() != 0) {
+            run();
+        }
+        else {
+            state = new IdleState(this);
+            body.setFill(IDLE_COLOR);
+        }
     }
 
     @Override
@@ -109,37 +132,45 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         return onGround;
     }
 
+    public void setFalling(boolean falling) {
+        this.falling = falling;
+    }
+
+    public boolean isFalling() {
+        return falling;
+    }
+
     @Override
     public void update(double deltaTime) {
-//        Floor floor = Main.getInstance().getFloor();
+        Floor floor = Main.getInstance().getFloor();
 
-//        CollisionResult collisionWithFloor = CollisionHelper.checkCollision(this, floor);
-//        onGround = collisionWithFloor.inCollision && collisionWithFloor.isAbove();
+        CollisionResult collisionWithFloor = CollisionHelper.checkCollision(this, floor);
+        onGround = collisionWithFloor.inCollision && collisionWithFloor.isAbove();
 
-//        if (!collisionWithFloor.inCollision) {
-//            for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
-//                CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
-//                if (collisionWithPlatform.inCollision && collisionWithPlatform.isAbove()) {
-//                    onGround = true;
-//                    break;
-//                }
-//            }
-//        }
+        if (!collisionWithFloor.inCollision) {
+            for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
+                CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
+                if (collisionWithPlatform.inCollision && collisionWithPlatform.isAbove()) {
+                    onGround = true;
+                    break;
+                }
+            }
+        }
 
-//        if(onGround) {
-//            body.setFill(Color.LIGHTBLUE);
-//        }
-//        else {
-//            body.setFill(Color.RED);
-//        }
+        if(onGround) {
+            body.setFill(Color.LIGHTBLUE);
+        }
+        else {
+            body.setFill(Color.RED);
+        }
 
-        state.move();
+        state.move(deltaTime);
     }
 
     // executed on keyboard input to perform particular actions
     @Override
     public void handle(KeyEvent event) {
-        if (event.getCode() == KeyCode.RIGHT && event.getEventType() == KeyEvent.KEY_PRESSED) {
+        if ((event.getCode() == KeyCode.RIGHT) && event.getEventType() == KeyEvent.KEY_PRESSED) {
             state.rightPressed();
         } else if (event.getCode() == KeyCode.RIGHT && event.getEventType() == KeyEvent.KEY_RELEASED) {
             state.rightReleased();
@@ -157,6 +188,8 @@ public class Player extends Character implements EventHandler<KeyEvent> {
             Main.getInstance().getCamera().startFollowing(this);
         } else if (event.getCode() == KeyCode.DIGIT3 && event.getEventType() == KeyEvent.KEY_PRESSED) {
             
+        } else if (event.getCode() == KeyCode.ESCAPE && event.getEventType() == KeyEvent.KEY_PRESSED) {
+            Main.getInstance().togglePause();
         }
     }
 }

@@ -37,6 +37,6 @@ public abstract class State {
     public void jumpReleased() {
     }
     
-    public void move(){
+    public void move(double deltaTime){
     }
 }

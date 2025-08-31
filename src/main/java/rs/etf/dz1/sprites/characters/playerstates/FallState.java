@@ -11,18 +11,13 @@ import rs.etf.dz1.sprites.characters.Player;
  *
  * @author om180345d
  */
-public class RunState extends State {
-    private static final double RUN_SPEED = 450.0f;
+public class FallState extends State {
+    private static final double STRAFE_SPEED = 450.0f;
+    private static final double GRAVITY_ACCELERATION = -30.0f;
 
-    public RunState(Player player) {
+    public FallState(Player player) {
         super(player);
-        player.setVelocityX(RUN_SPEED);
-    }
-
-    @Override
-    public void jumpPressed() {
-        super.jumpPressed();
-        player.jump();
+        player.setFalling(true);
     }
 
     @Override
@@ -37,34 +32,34 @@ public class RunState extends State {
     public void leftPressed() {
         super.leftPressed();
         player.faceLeft();
-        player.run();
+        player.setVelocityX(STRAFE_SPEED);
     }
 
     @Override
     public void rightReleased() {
         super.rightReleased();
-        if (player.isFaceRight()) {
-            player.setVelocityX(0);
-        }
+        player.setVelocityX(0);
     }
 
     @Override
     public void rightPressed() {
         super.rightPressed();
         player.faceRight();
-        player.run();
+        player.setVelocityX(STRAFE_SPEED);
     }
 
     @Override
     public void move(double deltaTime) {
-        double currentVelocityX = player.getVelocityX();
-        player.setTranslateX(player.getTranslateX() + player.getVelocityX() * deltaTime);
-        if (!player.isOnGround()) {
-            player.fall();
-            return;
-        }
+        double currentVelocityY = player.getVelocityY();
 
-        if (currentVelocityX == 0) {
+        player.setTranslateX(player.getTranslateX() + player.getVelocityX() * deltaTime);
+        player.setTranslateY(player.getTranslateY() - currentVelocityY * deltaTime);
+
+        currentVelocityY += GRAVITY_ACCELERATION;
+        player.setVelocityY(currentVelocityY);
+
+        if (player.isOnGround()) {
+            player.setVelocityY(0);
             player.stop();
         }
     }

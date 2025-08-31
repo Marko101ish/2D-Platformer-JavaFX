@@ -24,18 +24,20 @@ public class EnemyManager extends SpriteManager<Enemy> {
             return;
         }
 
+        boolean playerIsFalling = player.isFalling();
+
         ownedSprites.forEach(enemy -> {
             CollisionResult collisionWithPlayer = CollisionHelper.checkCollision(enemy, player);
             // if player is above the enemy, enemy is killed
             if (collisionWithPlayer.inCollision) {
-                if (collisionWithPlayer.isBelow()) {
+                if (collisionWithPlayer.isBelow() && playerIsFalling) {
                     enemy.takeHit();
                     if (!enemy.isAlive()) {
                         readyForRemoval.add(enemy);
                     }
                 }
                 else {
-                    player.takeHit();
+                    // player.takeHit();
                 }
             }
         });

@@ -15,6 +15,9 @@ public class IdleState extends State {
     
     public IdleState(Player player) {
         super(player);
+        if (player.getVelocityX() != 0) {
+            player.run();
+        }
     }
 
     @Override
@@ -35,6 +38,13 @@ public class IdleState extends State {
         super.rightPressed();
         player.faceRight();
         player.run();
+    }
+
+    @Override
+    public void move(double deltaTime) {
+        if (!player.isOnGround()) {
+            player.fall();
+        }
     }
     
 }

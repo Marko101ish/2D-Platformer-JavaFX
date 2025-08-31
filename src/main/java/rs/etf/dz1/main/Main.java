@@ -45,6 +45,8 @@ public class Main extends Application {
 
     private static Main instance;
 
+    private boolean isPaused = false;
+
     private Group bgLayer;
     private Group floorLayer;
     private Group characterLayer;
@@ -88,6 +90,24 @@ public class Main extends Application {
         return platformManager;
     }
 
+    public void togglePause() {
+        if (isPaused) {
+            resumeGame();
+        }
+        else {
+            pauseGame();
+        }
+    }
+
+    public void pauseGame() {
+        isPaused = true;
+    }
+
+    public void resumeGame() {
+        this.lastFrameNanoTime = System.nanoTime();
+        isPaused = false;
+    }
+
     @Override
     public void start(Stage primaryStage) {
         instance = this;
@@ -108,6 +128,10 @@ public class Main extends Application {
                 // Proper delta time calculation
                 double deltaTime = deltaNanoTime / 1_000_000_000.0;
                 deltaTime = 1./60.0;
+                if (isPaused) {
+                    deltaTime = 0;
+                }
+
                 update(deltaTime);
             }
         }.start();
