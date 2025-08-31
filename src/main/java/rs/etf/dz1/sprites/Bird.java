@@ -8,15 +8,12 @@ package rs.etf.dz1.sprites;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
-
-import java.net.URL;
+import rs.etf.dz1.utils.SpriteSheet;
 
 /**
  *
@@ -31,21 +28,21 @@ public class Bird extends Sprite {
     private static final double SPEED = 350.0;
 
     private final double velocity;
-    private static ImageView imageView;
 
-    public Bird(Image spriteSheet, Rectangle2D[] spriteBounds) {
+    public Bird(SpriteSheet spriteSheet) {
         velocity = SPEED;
 
-        ImageView imageView = new ImageView(spriteSheet);
-        imageView.setViewport(spriteBounds[0]);
+        Rectangle2D[] spriteFrames = spriteSheet.getFrames();
 
+        ImageView imageView = spriteSheet.createImageView();
         Timeline timeline = new Timeline();
-        ObservableList<KeyFrame> keyFrames = timeline.getKeyFrames();
-        for (int spriteIndex = 0; spriteIndex <= spriteBounds.length; ++spriteIndex) {
-            Duration frameStart = Duration.millis(spriteIndex * FRAME_DURATION);
 
-            final int currentFrameIndex = spriteIndex % spriteBounds.length;
-            keyFrames.add(new KeyFrame(frameStart, event -> imageView.setViewport(spriteBounds[currentFrameIndex])));
+        ObservableList<KeyFrame> keyFrames = timeline.getKeyFrames();
+        for (int spriteIndex = 0; spriteIndex <= spriteFrames.length; ++spriteIndex) {
+            Duration frameStart = Duration.millis(spriteIndex * FRAME_DURATION);
+            final Rectangle2D currentSprite = spriteFrames[spriteIndex % spriteFrames.length];
+
+            keyFrames.add(new KeyFrame(frameStart, event -> imageView.setViewport(currentSprite)));
         }
 
         timeline.setCycleCount(Animation.INDEFINITE);
