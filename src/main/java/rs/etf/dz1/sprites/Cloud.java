@@ -15,7 +15,7 @@ import javafx.scene.transform.Scale;
  */
 public class Cloud extends Sprite {
 
-    private double velocity;
+    private final double velocity;
 
     public Cloud(double velocity) {
         this.velocity = velocity;

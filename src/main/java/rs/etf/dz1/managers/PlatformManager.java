@@ -2,6 +2,7 @@ package rs.etf.dz1.managers;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Enemy;
 import rs.etf.dz1.sprites.Platform;
 
@@ -12,8 +13,7 @@ public class PlatformManager extends SpriteManager<Platform> {
     private static final double SPEED = 200.0;
 
     // [0, 1]
-    private static double ENEMY_PROBABILITY = 0.33;
-    private EnemyManager enemyManager;
+    private static final double ENEMY_PROBABILITY = 0.33;
 
     // enemyProbability defines the probability of
     // this platform spawning with an enemy on it
@@ -21,15 +21,16 @@ public class PlatformManager extends SpriteManager<Platform> {
         super(config);
     }
 
-    public void setEnemyManager(EnemyManager  enemyManager) {
-        this.enemyManager = enemyManager;
-    }
-
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
 
-        if (!justSpawned || enemyManager == null) {
+        if (!justSpawned) {
+            return;
+        }
+
+        EnemyManager enemyManager = Main.getInstance().getEnemyManager();
+        if (enemyManager == null) {
             return;
         }
 

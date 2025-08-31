@@ -17,7 +17,6 @@ public abstract class SpriteManager<T extends Sprite> extends Sprite {
     protected final Random randomizer;
 
     private final SpawnerConfig config;
-
     private double timeUntilSpawn;
 
     public SpriteManager(SpawnerConfig config) {

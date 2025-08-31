@@ -13,6 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import rs.etf.dz1.cameras.Camera;
+import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.playerstates.DeadState;
 import rs.etf.dz1.sprites.playerstates.IdleState;
 import rs.etf.dz1.sprites.playerstates.JumpState;
@@ -43,9 +44,7 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
 
     private boolean dead = false;
 
-    private Camera camera;
-
-    public Player(Camera camera) {
+    public Player() {
         state = new IdleState(this);
         getChildren().clear();
         body = new Circle(0, 0, 40);
@@ -54,8 +53,6 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
         eye.setFill(EYE_COLOR);
         getChildren().add(body);
         getChildren().add(eye);
-
-        this.camera = camera;
     }
 
     public double getVelocity() {
@@ -134,9 +131,9 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
         } else if (event.getCode() == KeyCode.SPACE && event.getEventType() == KeyEvent.KEY_RELEASED) {
             state.jumpReleased();
         } else if (event.getCode() == KeyCode.DIGIT1 && event.getEventType() == KeyEvent.KEY_PRESSED) {
-            camera.stopFollowing();
+            Main.getInstance().getCamera().stopFollowing();
         } else if (event.getCode() == KeyCode.DIGIT2 && event.getEventType() == KeyEvent.KEY_PRESSED) {
-            camera.startFollowing(this);
+            Main.getInstance().getCamera().startFollowing(this);
         } else if (event.getCode() == KeyCode.DIGIT3 && event.getEventType() == KeyEvent.KEY_PRESSED) {
             
         }

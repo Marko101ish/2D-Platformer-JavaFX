@@ -20,15 +20,9 @@ import rs.etf.dz1.managers.SpawnerConfig;
 public class Background extends Sprite {
     private static final double CLOUD_SPAWN_COOLDOWN = 1.5;
 
-    private final int width;
-    private final int height;
-
     private CloudManager cloudManager;
 
     public Background(int width, int height) {
-        this.width = width;
-        this.height = height;
-
         Stop[] stops = new Stop[] { new Stop(0, Color.LIGHTBLUE), new Stop(1, Color.DEEPSKYBLUE)};
         LinearGradient gradient = new LinearGradient(0, 0, 0, height, false, CycleMethod.NO_CYCLE, stops);
 

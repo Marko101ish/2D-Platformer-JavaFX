@@ -3,8 +3,6 @@ package rs.etf.dz1.sprites;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
-import java.util.Random;
-
 public class Platform extends Sprite {
     private double velocity;
 

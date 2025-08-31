@@ -17,11 +17,8 @@ import java.util.Random;
  */
 public class FloorBlock extends Sprite {
 
-    private Rectangle background;
-    private Polygon foreground;
-
     public FloorBlock() {
-        foreground = new Polygon();
+        Polygon foreground = new Polygon();
 
         // Grass polygon
         //        1                       7  ======== y =  -0.5  - top of the block
@@ -39,7 +36,7 @@ public class FloorBlock extends Sprite {
                   0.5,  -0.5,   // 7
         });
 
-        background = new Rectangle(-0.5, -0.5, 1, 1);
+        Rectangle background = new Rectangle(-0.5, -0.5, 1, 1);
         Random rand = new Random();
         background.setFill(Color.SIENNA);
         foreground.setFill(Color.LAWNGREEN);

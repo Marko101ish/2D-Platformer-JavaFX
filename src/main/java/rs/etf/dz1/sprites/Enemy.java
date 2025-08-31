@@ -19,7 +19,7 @@ import javafx.util.Duration;
 public class Enemy extends Sprite {
 
     private Platform platform = null;
-    private double velocity;
+    private final double velocity;
 
     public Enemy(double velocity) {
         this.velocity = velocity;

@@ -5,9 +5,6 @@ package rs.etf.dz1.main;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -39,7 +36,6 @@ public class Main extends Application {
 
     private Background background;
     private Player player;
-    private List<Platform> platforms;
     private UI ui;
     private EnemyManager enemyManager;
     private PlatformManager platformManager;
@@ -55,32 +51,13 @@ public class Main extends Application {
     public static Main getInstance(){
         return instance;
     }
-    
+
     public Camera getCamera(){
         return camera;
     }
-    
-    // called once per frame to update game state
-    // deltaTime is in milliseconds here
-    private void update(double deltaTime) {
-        background.update(deltaTime);
-        player.update(deltaTime);
-        enemyManager.update(deltaTime);
-        platformManager.update(deltaTime);
-        platforms.forEach(e->e.update(deltaTime));
 
-        timeLeft = timeLeft - deltaTime;
-
-        // When there's no time left the game closes automatically
-        if(timeLeft < 0)
-        {
-            // System.exit(0);
-        }
-
-        camera.update(deltaTime);
-
-        ui.setTimeLeft(timeLeft);
-        ui.update(deltaTime);
+    public EnemyManager getEnemyManager(){
+        return enemyManager;
     }
 
     @Override
@@ -103,9 +80,7 @@ public class Main extends Application {
 
         enemyManager = new EnemyManager(enemySpawnerconfig);
         platformManager = new PlatformManager(platformSpawnerConfig);
-        platformManager.setEnemyManager(enemyManager);
 
-        platforms = new LinkedList<>();
         background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
@@ -120,9 +95,9 @@ public class Main extends Application {
         sprites.getChildren().add(platformManager);
         sprites.getChildren().add(enemyManager);
 
-        player = new Player(camera);
+        player = new Player();
         player.setTranslateX(100);
-        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2);
+        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.);
         sprites.getChildren().add(player);
         enemyManager.setPlayer(player);
 
@@ -157,6 +132,28 @@ public class Main extends Application {
                 update(deltaTime);
             }
         }.start();
+    }
+
+    // called once per frame to update game state
+    // deltaTime is in milliseconds here
+    private void update(double deltaTime) {
+        background.update(deltaTime);
+        player.update(deltaTime);
+        enemyManager.update(deltaTime);
+        platformManager.update(deltaTime);
+
+        timeLeft = timeLeft - deltaTime;
+
+        // When there's no time left the game closes automatically
+        if(timeLeft < 0)
+        {
+            // System.exit(0);
+        }
+
+        camera.update(deltaTime);
+
+        ui.setTimeLeft(timeLeft);
+        ui.update(deltaTime);
     }
 
     /**
