@@ -9,47 +9,46 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class SpriteManager<T extends Sprite> extends Sprite {
-    private LinkedList<T> ownedSprites = new LinkedList<T>();
-    private SpawnerConfig config;
+    protected List<T> ownedSprites = new LinkedList<T>();
+
+    private final Random randomizer;
+    private final SpawnerConfig config;
 
     private double timeUntilSpawn;
-    private Random randomizer;
 
     public SpriteManager(SpawnerConfig config) {
         this.config = config;
-        this.timeUntilSpawn = 0;
-        this.randomizer = new Random();
+        timeUntilSpawn = 0;
+        randomizer = new Random();
     }
 
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
 
-        if (this.timeUntilSpawn <= 0) {
-            this.timeUntilSpawn = config.spawnCooldown();
+        if (timeUntilSpawn <= 0) {
+            timeUntilSpawn = config.spawnCooldown();
 
-            spawnSprite();
+            spawnSprite(getRandomSpawnPoint());
         }
 
-        this.timeUntilSpawn -= deltaTime;
+        timeUntilSpawn -= deltaTime;
 
         removeOutOfBoundsSprites();
         ownedSprites.forEach(e -> e.update(deltaTime));
-        System.out.println(ownedSprites.size());
     }
 
-    protected abstract T createSprite();
-
-    private void spawnSprite() {
+    public void spawnSprite(Point2D spawnPoint) {
         T newSprite = createSprite();
         ownedSprites.add(newSprite);
         getChildren().add(newSprite);
-        Point2D spawnPoint = getSpawnPoint();
         newSprite.setTranslateX(spawnPoint.getX());
         newSprite.setTranslateY(spawnPoint.getY());
     }
 
-    private Point2D getSpawnPoint()
+    protected abstract T createSprite();
+
+    private Point2D getRandomSpawnPoint()
     {
         double randomHeight = randomizer.nextDouble() * (config.maxSpawnY() - config.minSpawnY()) +  config.minSpawnY();
         return new Point2D(config.spawnX(), randomHeight);

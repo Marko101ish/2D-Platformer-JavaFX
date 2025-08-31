@@ -16,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import rs.etf.dz1.cameras.Camera;
+import rs.etf.dz1.managers.EnemyManager;
+import rs.etf.dz1.managers.SpawnerConfig;
 import rs.etf.dz1.sprites.*;
 
 /**
@@ -35,15 +37,13 @@ public class Main extends Application {
 
     public static final String TITLE = "Platformer";
 
-    public static final double ENEMY_SPEED = 200.0;
-
     public static final double TIME_TO_LIVE_S = 60.0;
 
     private Background background;
     private Player player;
-    private List<Enemy> enemies;
     private List<Platform> platforms;
     private UI ui;
+    private EnemyManager enemyManager;
 
     private static Main instance;
     
@@ -66,17 +66,8 @@ public class Main extends Application {
     private void update(double deltaTime) {
         background.update(deltaTime);
         player.update(deltaTime);
-        enemies.forEach(e -> e.update(deltaTime));
+        enemyManager.update(deltaTime);
         platforms.forEach(e->e.update(deltaTime));
-
-        // checking collision between player and enemies
-        enemies.forEach(e -> {
-            if (player.getBoundsInParent().intersects(e.getBoundsInParent())) {
-                if (!player.isDead()) {
-                    player.takeHit();
-                }
-            }
-        });
 
         timeLeft = timeLeft - deltaTime;
 
@@ -95,8 +86,15 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         instance = this;
-        
-        enemies = new LinkedList<>();
+
+        SpawnerConfig enemySpawnerconfig = new SpawnerConfig(
+                WINDOW_WIDTH + ENEMY_WIDTH,
+                WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2.,
+                WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2.,
+                2.5
+        );
+
+        enemyManager = new EnemyManager(enemySpawnerconfig);
         platforms = new LinkedList<>();
         background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -109,20 +107,13 @@ public class Main extends Application {
         Group sprites = new Group();
         camera.getChildren().add(sprites);
 
-        // making 100 enemies and adding them to the scene
-        for (int i = 0; i < 100; i++) {
-            Enemy enemy = new Enemy(ENEMY_SPEED);
-            enemy.setTranslateX((1 + i) * 800);
-            enemy.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2);
-            sprites.getChildren().add(enemy);
-            enemies.add(enemy);
-        }
+        sprites.getChildren().add(enemyManager);
 
         Random rand =  new Random();
         // making 10 platforms and adding them to the scene
         for (int j = 0; j < 10; j++) {
             Platform platform = new Platform();
-            double platformHeight = rand.nextDouble() * (WINDOW_HEIGHT - 2 * ENEMY_HEIGHT) + ENEMY_HEIGHT;
+            double platformHeight = rand.nextDouble() * (WINDOW_HEIGHT - 3 * ENEMY_HEIGHT) + ENEMY_HEIGHT;
             platform.setTranslateX((1 + j) * 300);
             platform.setTranslateY(platformHeight);
             sprites.getChildren().add(platform);
@@ -133,6 +124,7 @@ public class Main extends Application {
         player.setTranslateX(100);
         player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2);
         sprites.getChildren().add(player);
+        enemyManager.setPlayer(player);
 
         ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE_S);
 
