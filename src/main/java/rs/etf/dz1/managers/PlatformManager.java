@@ -4,7 +4,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import rs.etf.dz1.main.Main;
-import rs.etf.dz1.sprites.Enemy;
+import rs.etf.dz1.sprites.characters.Enemy;
 import rs.etf.dz1.sprites.Platform;
 
 public class PlatformManager extends SpriteManager<Platform> {

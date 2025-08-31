@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rs.etf.dz1.sprites;
+package rs.etf.dz1.sprites.characters;
 
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -11,12 +11,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
+import rs.etf.dz1.sprites.Platform;
 
 /**
  *
  * @author om180345d
  */
-public class Enemy extends Sprite {
+public class Enemy extends Character {
     private static final double SPEED = 350.0;
 
     private Platform platform = null;

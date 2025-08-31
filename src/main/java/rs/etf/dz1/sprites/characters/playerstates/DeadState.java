@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rs.etf.dz1.sprites.playerstates;
+package rs.etf.dz1.sprites.characters.playerstates;
 
 import javafx.animation.*;
 import javafx.geometry.Bounds;
 import javafx.util.Duration;
-import rs.etf.dz1.sprites.Player;
+import rs.etf.dz1.sprites.characters.Player;
 
 /**
  *

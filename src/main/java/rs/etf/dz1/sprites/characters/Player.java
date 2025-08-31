@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rs.etf.dz1.sprites;
+package rs.etf.dz1.sprites.characters;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
@@ -13,19 +13,17 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import rs.etf.dz1.main.Main;
-import rs.etf.dz1.sprites.playerstates.DeadState;
-import rs.etf.dz1.sprites.playerstates.IdleState;
-import rs.etf.dz1.sprites.playerstates.JumpState;
-import rs.etf.dz1.sprites.playerstates.RunState;
-import rs.etf.dz1.sprites.playerstates.State;
-import rs.etf.dz1.utils.collisions.CollisionHelper;
-import rs.etf.dz1.utils.collisions.CollisionResult;
+import rs.etf.dz1.sprites.characters.playerstates.DeadState;
+import rs.etf.dz1.sprites.characters.playerstates.IdleState;
+import rs.etf.dz1.sprites.characters.playerstates.JumpState;
+import rs.etf.dz1.sprites.characters.playerstates.RunState;
+import rs.etf.dz1.sprites.characters.playerstates.State;
 
 /**
  *
  * @author om180345d
  */
-public class Player extends Sprite implements EventHandler<KeyEvent> {
+public class Player extends Character implements EventHandler<KeyEvent> {
 
     private static final Paint IDLE_COLOR = Color.YELLOW;
     private static final Paint RUN_COLOR = Color.GREEN;
@@ -43,7 +41,6 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
     private Circle body;
     private Circle eye;
 
-    private boolean dead = false;
     private boolean onGround = false;
 
     public Player() {
@@ -94,8 +91,8 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
         body.setFill(IDLE_COLOR);
     }
 
+    @Override
     public void die() {
-        dead = true;
         state = new DeadState(this);
         body.setFill(DEAD_COLOR);
     }
@@ -106,10 +103,6 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
 
     public boolean isFaceLeft() {
         return !right;
-    }
-
-    public boolean isDead() {
-        return dead;
     }
 
     public boolean isOnGround() {
@@ -165,9 +158,5 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
         } else if (event.getCode() == KeyCode.DIGIT3 && event.getEventType() == KeyEvent.KEY_PRESSED) {
             
         }
-    }
-
-    public void takeHit() {
-        die();
     }
 }

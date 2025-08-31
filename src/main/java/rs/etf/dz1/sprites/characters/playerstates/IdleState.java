@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rs.etf.dz1.sprites.playerstates;
+package rs.etf.dz1.sprites.characters.playerstates;
 
-import rs.etf.dz1.sprites.Player;
+import rs.etf.dz1.sprites.characters.Player;
 
 /**
  *
  * @author om180345d
  */
-public class RunState extends State {
-
-    public RunState(Player player) {
+public class IdleState extends State {
+    
+    public IdleState(Player player) {
         super(player);
     }
 
@@ -24,26 +24,10 @@ public class RunState extends State {
     }
 
     @Override
-    public void leftReleased() {
-        super.leftReleased();
-        if (player.isFaceLeft()) {
-            player.stop();
-        }
-    }
-
-    @Override
     public void leftPressed() {
         super.leftPressed();
         player.faceLeft();
         player.run();
-    }
-
-    @Override
-    public void rightReleased() {
-        super.rightReleased();
-        if (player.isFaceRight()) {
-            player.stop();
-        }
     }
 
     @Override
@@ -52,10 +36,5 @@ public class RunState extends State {
         player.faceRight();
         player.run();
     }
-
-    @Override
-    public void move() {
-        player.setTranslateX(player.getTranslateX() + player.getVelocity());
-    }
-
+    
 }

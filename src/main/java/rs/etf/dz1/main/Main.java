@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import rs.etf.dz1.cameras.Camera;
 import rs.etf.dz1.managers.*;
 import rs.etf.dz1.sprites.*;
+import rs.etf.dz1.sprites.characters.Player;
 
 /**
  *

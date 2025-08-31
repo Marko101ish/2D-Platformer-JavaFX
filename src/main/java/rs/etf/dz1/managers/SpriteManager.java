@@ -12,6 +12,7 @@ import java.util.Random;
 
 public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
     protected List<T> ownedSprites = new LinkedList<T>();
+    protected List<T> readyForRemoval = new LinkedList<T>();
 
     // This will be true for the duration of the frame
     // when a new Sprite has been spawned
@@ -52,6 +53,10 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
         timeUntilSpawn -= deltaTime;
 
         removeOutOfBoundsSprites();
+
+        layer.getChildren().removeAll(readyForRemoval);
+        ownedSprites.removeAll(readyForRemoval);
+
         ownedSprites.forEach(e -> e.update(deltaTime));
     }
 
@@ -75,17 +80,12 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
     }
 
     private void removeOutOfBoundsSprites() {
-        List<T> spritesToRemove = new LinkedList<>();
         for (T sprite : ownedSprites) {
-
             Bounds bounds = sprite.getBoundsInParent();
             if (bounds.getMaxX() < 0) {
-                spritesToRemove.add(sprite);
+                readyForRemoval.add(sprite);
             }
         }
-
-        layer.getChildren().removeAll(spritesToRemove);
-        ownedSprites.removeAll(spritesToRemove);
     }
 
 }

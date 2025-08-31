@@ -1,12 +1,11 @@
 package rs.etf.dz1.managers;
 
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import rs.etf.dz1.main.Main;
-import rs.etf.dz1.sprites.Enemy;
-import rs.etf.dz1.sprites.Platform;
-import rs.etf.dz1.sprites.Player;
+import rs.etf.dz1.sprites.characters.Enemy;
+import rs.etf.dz1.sprites.characters.Player;
 import rs.etf.dz1.utils.collisions.CollisionHelper;
+import rs.etf.dz1.utils.collisions.CollisionResult;
 
 public class EnemyManager extends SpriteManager<Enemy> {
     public static final int ENEMY_WIDTH = 100;
@@ -21,18 +20,25 @@ public class EnemyManager extends SpriteManager<Enemy> {
         super.update(deltaTime);
 
         Player player = Main.getInstance().getPlayer();
+        if (!player.isAlive()) {
+            return;
+        }
 
-        ownedSprites.forEach(e -> {
-            if (CollisionHelper.checkCollision(player, e).inCollision) {
-                if (!player.isDead()) {
-                    // player.takeHit();
+        ownedSprites.forEach(enemy -> {
+            CollisionResult collisionWithPlayer = CollisionHelper.checkCollision(enemy, player);
+            // if player is above the enemy, enemy is killed
+            if (collisionWithPlayer.inCollision) {
+                if (collisionWithPlayer.isBelow()) {
+                    enemy.takeHit();
+                    if (!enemy.isAlive()) {
+                        readyForRemoval.add(enemy);
+                    }
+                }
+                else {
+                    player.takeHit();
                 }
             }
         });
-    }
-
-    public void spawnSprite(Point2D spawnPoint, Platform platform) {
-        super.spawnSprite(spawnPoint);
     }
 
     @Override
