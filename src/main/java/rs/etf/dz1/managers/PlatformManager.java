@@ -2,6 +2,7 @@ package rs.etf.dz1.managers;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Enemy;
 import rs.etf.dz1.sprites.Platform;
@@ -16,8 +17,8 @@ public class PlatformManager extends SpriteManager<Platform> {
 
     // enemyProbability defines the probability of
     // this platform spawning with an enemy on it
-    public PlatformManager(SpawnerConfig config) {
-        super(config);
+    public PlatformManager(SpawnerConfig config, Group layer) {
+        super(config, layer);
     }
 
     @Override

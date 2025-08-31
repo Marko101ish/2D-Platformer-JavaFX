@@ -2,13 +2,15 @@ package rs.etf.dz1.managers;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import rs.etf.dz1.sprites.Sprite;
+import rs.etf.dz1.utils.IUpdatable;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class SpriteManager<T extends Sprite> extends Sprite {
+public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
     protected List<T> ownedSprites = new LinkedList<T>();
 
     // This will be true for the duration of the frame
@@ -19,16 +21,19 @@ public abstract class SpriteManager<T extends Sprite> extends Sprite {
     private final SpawnerConfig config;
     private double timeUntilSpawn;
 
-    public SpriteManager(SpawnerConfig config) {
+    // Layer used for displaying ownedSprites
+    private Group layer;
+
+    public SpriteManager(SpawnerConfig config, Group layer) {
         this.config = config;
+        this.layer = layer;
+
         timeUntilSpawn = 0;
         randomizer = new Random(System.nanoTime());
     }
 
     @Override
     public void update(double deltaTime) {
-        super.update(deltaTime);
-
         if (timeUntilSpawn <= 0) {
             timeUntilSpawn = config.spawnCooldown();
 
@@ -49,7 +54,8 @@ public abstract class SpriteManager<T extends Sprite> extends Sprite {
     public T spawnSprite(Point2D spawnPoint) {
         T newSprite = createSprite();
         ownedSprites.addLast(newSprite);
-        getChildren().add(newSprite);
+        layer.getChildren().add(newSprite);
+
         newSprite.setTranslateX(spawnPoint.getX());
         newSprite.setTranslateY(spawnPoint.getY());
 
@@ -74,7 +80,7 @@ public abstract class SpriteManager<T extends Sprite> extends Sprite {
             }
         }
 
-        getChildren().removeAll(spritesToRemove);
+        layer.getChildren().removeAll(spritesToRemove);
         ownedSprites.removeAll(spritesToRemove);
     }
 

@@ -13,9 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import rs.etf.dz1.cameras.Camera;
-import rs.etf.dz1.managers.EnemyManager;
-import rs.etf.dz1.managers.PlatformManager;
-import rs.etf.dz1.managers.SpawnerConfig;
+import rs.etf.dz1.managers.*;
 import rs.etf.dz1.sprites.*;
 
 /**
@@ -35,17 +33,28 @@ public class Main extends Application {
     public static final int FLOOR_WIDTH = WINDOW_WIDTH;
     public static final int FLOOR_HEIGHT = 50;
 
+    private static final double PLATFORM_SPAWN_COOLDOWN = 2.0;
+    private static final double ENEMY_SPAWN_COOLDOWN = 2.5;
+    private static final double CLOUD_SPAWN_COOLDOWN = 1.5;
+    private static final double BIRD_SPAWN_COOLDOWN = 4.0;
+
     public static final String TITLE = "Platformer";
 
     public static final double TIME_TO_LIVE_S = 60.0;
 
-    private Background background;
-    private Player player;
-    private UI ui;
-    private EnemyManager enemyManager;
-    private PlatformManager platformManager;
-
     private static Main instance;
+
+    private Group bgLayer;
+    private Group floorLayer;
+    private Group characterLayer;
+    private Group uiLayer;
+
+    private Player player;
+    private PlatformManager platformManager;
+    private EnemyManager enemyManager;
+    private CloudManager cloudManager;
+    private BirdManager birdManager;
+    private UI ui;
     
     private long lastFrameNanoTime;
     private double timeLeft = TIME_TO_LIVE_S;
@@ -61,6 +70,10 @@ public class Main extends Application {
         return camera;
     }
 
+    public Player getPlayer(){
+        return player;
+    }
+
     public EnemyManager getEnemyManager(){
         return enemyManager;
     }
@@ -69,57 +82,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         instance = this;
 
-        SpawnerConfig enemySpawnerconfig = new SpawnerConfig(
-                WINDOW_WIDTH + EnemyManager.ENEMY_WIDTH,
-                WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.,
-                WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.,
-                2.5
-        );
-
-        SpawnerConfig platformSpawnerConfig = new SpawnerConfig(
-                WINDOW_WIDTH + 200.0,
-                4 * EnemyManager.ENEMY_HEIGHT,
-                WINDOW_HEIGHT - (FLOOR_HEIGHT + 1.2 * EnemyManager.ENEMY_HEIGHT),
-                2.0
-        );
-
-        enemyManager = new EnemyManager(enemySpawnerconfig);
-        platformManager = new PlatformManager(platformSpawnerConfig);
-
-        background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-        Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
-        floor.setTranslateY(WINDOW_HEIGHT);
-
-        camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
-        camera.getChildren().add(floor);
-
-        Group sprites = new Group();
-        camera.getChildren().add(sprites);
-
-        sprites.getChildren().add(platformManager);
-        sprites.getChildren().add(enemyManager);
-
-        player = new Player();
-        player.setTranslateX(100);
-        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.);
-        sprites.getChildren().add(player);
-        enemyManager.setPlayer(player);
-
-        ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE_S);
-
-        Group root = new Group();
-        root.getChildren().add(background);
-        root.getChildren().add(camera);
-        root.getChildren().add(ui);
-
-        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-        scene.setOnKeyPressed(player);
-        scene.setOnKeyReleased(player);
-        primaryStage.setTitle(TITLE);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        primaryStage.setResizable(false);
+        initScene(primaryStage);
+        initManagers();
 
         this.lastFrameNanoTime = System.nanoTime();
 
@@ -142,10 +106,11 @@ public class Main extends Application {
     // called once per frame to update game state
     // deltaTime is in milliseconds here
     private void update(double deltaTime) {
-        background.update(deltaTime);
         player.update(deltaTime);
-        enemyManager.update(deltaTime);
         platformManager.update(deltaTime);
+        enemyManager.update(deltaTime);
+        cloudManager.update(deltaTime);
+        birdManager.update(deltaTime);
 
         timeLeft = timeLeft - deltaTime;
 
@@ -159,6 +124,86 @@ public class Main extends Application {
 
         ui.setTimeLeft(timeLeft);
         ui.update(deltaTime);
+    }
+
+    void initScene(Stage primaryStage) {
+        // Background
+        bgLayer = new Group();
+
+        // Middle-ground
+        floorLayer = new Group();
+        characterLayer = new Group();
+        camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
+        camera.getChildren().add(floorLayer);
+        camera.getChildren().add(characterLayer);
+
+        // Foreground
+        uiLayer = new Group();
+
+        SkyBox skyBox = new SkyBox(WINDOW_WIDTH, WINDOW_HEIGHT);
+        bgLayer.getChildren().add(skyBox);
+
+        Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
+        floor.setTranslateY(WINDOW_HEIGHT);
+        floorLayer.getChildren().add(floor);
+
+        player = new Player();
+        player.setTranslateX(100);
+        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.);
+        characterLayer.getChildren().add(player);
+
+        this.ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE_S);
+        uiLayer.getChildren().add(ui);
+
+        Group root = new Group();
+        // Background
+        root.getChildren().add(bgLayer);
+        // Middle-ground
+        root.getChildren().add(camera);
+        // Foreground
+        root.getChildren().add(uiLayer);
+
+        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+        scene.setOnKeyPressed(player);
+        scene.setOnKeyReleased(player);
+        primaryStage.setTitle(TITLE);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        primaryStage.setResizable(false);
+    }
+
+    void initManagers() {
+        SpawnerConfig platformSpawnerConfig = new SpawnerConfig(
+                WINDOW_WIDTH + 200.0,
+                4 * EnemyManager.ENEMY_HEIGHT,
+                WINDOW_HEIGHT - (FLOOR_HEIGHT + 1.2 * EnemyManager.ENEMY_HEIGHT),
+                PLATFORM_SPAWN_COOLDOWN
+        );
+        platformManager = new PlatformManager(platformSpawnerConfig, floorLayer);
+
+        SpawnerConfig enemySpawnerconfig = new SpawnerConfig(
+                WINDOW_WIDTH + EnemyManager.ENEMY_WIDTH,
+                WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.,
+                WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.,
+                ENEMY_SPAWN_COOLDOWN
+        );
+        enemyManager = new EnemyManager(enemySpawnerconfig, characterLayer);
+
+        SpawnerConfig cloudSpawnConfig = new SpawnerConfig(
+                WINDOW_WIDTH + 200.0,
+                0.0,
+                WINDOW_HEIGHT * 0.5,
+                CLOUD_SPAWN_COOLDOWN
+        );
+        cloudManager = new CloudManager(cloudSpawnConfig, bgLayer);
+
+        SpawnerConfig birdSpawnConfig = new SpawnerConfig(
+                WINDOW_WIDTH + 200.0,
+                0.0,
+                WINDOW_HEIGHT * 0.33,
+                BIRD_SPAWN_COOLDOWN
+        );
+        birdManager = new BirdManager(birdSpawnConfig, bgLayer);
     }
 
     /**

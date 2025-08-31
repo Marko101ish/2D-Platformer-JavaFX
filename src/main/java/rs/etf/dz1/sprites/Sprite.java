@@ -6,20 +6,15 @@
 package rs.etf.dz1.sprites;
 
 import javafx.scene.Group;
+import rs.etf.dz1.utils.IUpdatable;
 
 /**
  *
  * @author om180345d
  */
-public abstract class Sprite extends Group {
-    
+public abstract class Sprite extends Group implements IUpdatable {
     // method should be redefined and called in Main.update() method to update the object status
-    // deltaTime is in seconds
-    //
-    // when moving objects make sure to take deltaTime into account
-    // so the simulation runs smoothly even with inconsistent frame rate
     public void update(double deltaTime) {
-        
+
     }
-    
 }

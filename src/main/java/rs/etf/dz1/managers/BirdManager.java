@@ -1,5 +1,6 @@
 package rs.etf.dz1.managers;
 
+import javafx.scene.Group;
 import rs.etf.dz1.sprites.Bird;
 import rs.etf.dz1.utils.SpriteSheet;
 
@@ -10,8 +11,8 @@ public class BirdManager  extends SpriteManager<Bird> {
 
     private SpriteSheet birdSpriteSheet;
 
-    public BirdManager(SpawnerConfig config) {
-        super(config);
+    public BirdManager(SpawnerConfig config, Group layer) {
+        super(config, layer);
 
         birdSpriteSheet = SpriteSheet.createSpriteSheet(BIRD_SPRITE_SHEET_FILE, SHEET_ROWS,  SHEET_COLS);
     }

@@ -1,30 +1,29 @@
 package rs.etf.dz1.managers;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
+import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Enemy;
 import rs.etf.dz1.sprites.Platform;
 import rs.etf.dz1.sprites.Player;
+import rs.etf.dz1.utils.Helper;
 
 public class EnemyManager extends SpriteManager<Enemy> {
     public static final int ENEMY_WIDTH = 100;
     public static final int ENEMY_HEIGHT = 80;
 
-    private Player player;
-
-    public EnemyManager(SpawnerConfig config) {
-        super(config);
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
+    public EnemyManager(SpawnerConfig config, Group layer) {
+        super(config, layer);
     }
 
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
 
+        Player player = Main.getInstance().getPlayer();
+
         ownedSprites.forEach(e -> {
-            if (player.getBoundsInParent().intersects(e.getBoundsInParent())) {
+            if (Helper.CheckCollision(player, e)) {
                 if (!player.isDead()) {
                     player.takeHit();
                 }
