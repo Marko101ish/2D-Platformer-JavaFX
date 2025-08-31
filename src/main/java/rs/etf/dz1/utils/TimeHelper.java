@@ -1,0 +1,13 @@
+package rs.etf.dz1.utils;
+
+public class TimeHelper {
+    private static double deltaTime;
+
+    public static double getDeltaTime() {
+        return deltaTime;
+    }
+
+    public static void setDeltaTime(double dt) {
+        deltaTime = dt;
+    }
+}

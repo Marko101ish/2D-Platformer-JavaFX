@@ -13,7 +13,7 @@ import rs.etf.dz1.sprites.characters.Player;
  */
 public class FallState extends State {
     private static final double STRAFE_SPEED = 450.0f;
-    private static final double GRAVITY_ACCELERATION = -30.0f;
+    private static final double GRAVITY_ACCELERATION = -1800.0f;
 
     boolean wasOnPlatform;
 
@@ -55,7 +55,7 @@ public class FallState extends State {
     public void update(double deltaTime) {
         super.update(deltaTime);
 
-        double newVelocityY = player.getVelocityY() - GRAVITY_ACCELERATION;
+        double newVelocityY = player.getVelocityY() - GRAVITY_ACCELERATION * deltaTime;
         player.setVelocityY(newVelocityY);
 
         // Allowing the player to pass through a platform if coming from underneath it

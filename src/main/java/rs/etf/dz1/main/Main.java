@@ -16,6 +16,7 @@ import rs.etf.dz1.cameras.Camera;
 import rs.etf.dz1.managers.*;
 import rs.etf.dz1.sprites.*;
 import rs.etf.dz1.sprites.characters.Player;
+import rs.etf.dz1.utils.TimeHelper;
 
 /**
  *
@@ -34,7 +35,7 @@ public class Main extends Application {
     public static final int FLOOR_WIDTH = WINDOW_WIDTH;
     public static final int FLOOR_HEIGHT = 50;
 
-    private static final double PLATFORM_SPAWN_COOLDOWN = 2.0;
+    private static final double PLATFORM_SPAWN_COOLDOWN = 3.5;
     private static final double ENEMY_SPAWN_COOLDOWN = 2.5;
     private static final double CLOUD_SPAWN_COOLDOWN = 1.5;
     private static final double BIRD_SPAWN_COOLDOWN = 4.0;
@@ -132,6 +133,7 @@ public class Main extends Application {
                     deltaTime = 0;
                 }
 
+                TimeHelper.setDeltaTime(deltaTime);
                 update(deltaTime);
             }
         }.start();
