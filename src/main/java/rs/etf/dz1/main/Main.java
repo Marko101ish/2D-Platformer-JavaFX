@@ -47,9 +47,11 @@ public class Main extends Application {
     private Group bgLayer;
     private Group floorLayer;
     private Group characterLayer;
+    private Group playerLayer;
     private Group uiLayer;
 
     private Player player;
+    private Floor floor;
     private PlatformManager platformManager;
     private EnemyManager enemyManager;
     private CloudManager cloudManager;
@@ -62,20 +64,27 @@ public class Main extends Application {
     private Camera camera; // camera used for applying transformations
     
     // returns the instance of the game (Main class)
-    public static Main getInstance(){
+    public static Main getInstance() {
         return instance;
     }
 
-    public Camera getCamera(){
+    public Camera getCamera() {
         return camera;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
-    public EnemyManager getEnemyManager(){
+    public Floor getFloor() {
+        return floor;
+    }
+
+    public EnemyManager getEnemyManager() {
         return enemyManager;
+    }
+    public PlatformManager getPlatformManager() {
+        return platformManager;
     }
 
     @Override
@@ -106,12 +115,6 @@ public class Main extends Application {
     // called once per frame to update game state
     // deltaTime is in milliseconds here
     private void update(double deltaTime) {
-        player.update(deltaTime);
-        platformManager.update(deltaTime);
-        enemyManager.update(deltaTime);
-        cloudManager.update(deltaTime);
-        birdManager.update(deltaTime);
-
         timeLeft = timeLeft - deltaTime;
 
         // When there's no time left the game closes automatically
@@ -120,6 +123,11 @@ public class Main extends Application {
             // System.exit(0);
         }
 
+        player.update(deltaTime);
+        platformManager.update(deltaTime);
+        enemyManager.update(deltaTime);
+        cloudManager.update(deltaTime);
+        birdManager.update(deltaTime);
         camera.update(deltaTime);
 
         ui.setTimeLeft(timeLeft);
@@ -133,9 +141,11 @@ public class Main extends Application {
         // Middle-ground
         floorLayer = new Group();
         characterLayer = new Group();
+        playerLayer = new Group();
         camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
         camera.getChildren().add(floorLayer);
         camera.getChildren().add(characterLayer);
+        camera.getChildren().add(playerLayer);
 
         // Foreground
         uiLayer = new Group();
@@ -143,14 +153,14 @@ public class Main extends Application {
         SkyBox skyBox = new SkyBox(WINDOW_WIDTH, WINDOW_HEIGHT);
         bgLayer.getChildren().add(skyBox);
 
-        Floor floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
+        floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
         floor.setTranslateY(WINDOW_HEIGHT);
         floorLayer.getChildren().add(floor);
 
         player = new Player();
         player.setTranslateX(100);
         player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.);
-        characterLayer.getChildren().add(player);
+        playerLayer.getChildren().add(player);
 
         this.ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE_S);
         uiLayer.getChildren().add(ui);

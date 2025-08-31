@@ -6,7 +6,7 @@ import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Enemy;
 import rs.etf.dz1.sprites.Platform;
 import rs.etf.dz1.sprites.Player;
-import rs.etf.dz1.utils.Helper;
+import rs.etf.dz1.utils.collisions.CollisionHelper;
 
 public class EnemyManager extends SpriteManager<Enemy> {
     public static final int ENEMY_WIDTH = 100;
@@ -23,9 +23,9 @@ public class EnemyManager extends SpriteManager<Enemy> {
         Player player = Main.getInstance().getPlayer();
 
         ownedSprites.forEach(e -> {
-            if (Helper.CheckCollision(player, e)) {
+            if (CollisionHelper.checkCollision(player, e).inCollision) {
                 if (!player.isDead()) {
-                    player.takeHit();
+                    // player.takeHit();
                 }
             }
         });

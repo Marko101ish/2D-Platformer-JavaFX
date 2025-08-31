@@ -32,6 +32,10 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
         randomizer = new Random(System.nanoTime());
     }
 
+    public final List<T> getOwnedSprites() {
+        return ownedSprites;
+    }
+
     @Override
     public void update(double deltaTime) {
         if (timeUntilSpawn <= 0) {

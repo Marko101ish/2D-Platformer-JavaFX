@@ -18,6 +18,8 @@ import rs.etf.dz1.sprites.playerstates.IdleState;
 import rs.etf.dz1.sprites.playerstates.JumpState;
 import rs.etf.dz1.sprites.playerstates.RunState;
 import rs.etf.dz1.sprites.playerstates.State;
+import rs.etf.dz1.utils.collisions.CollisionHelper;
+import rs.etf.dz1.utils.collisions.CollisionResult;
 
 /**
  *
@@ -42,6 +44,7 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
     private Circle eye;
 
     private boolean dead = false;
+    private boolean onGround = false;
 
     public Player() {
         state = new IdleState(this);
@@ -109,8 +112,34 @@ public class Player extends Sprite implements EventHandler<KeyEvent> {
         return dead;
     }
 
+    public boolean isOnGround() {
+        return onGround;
+    }
+
     @Override
     public void update(double deltaTime) {
+//        Floor floor = Main.getInstance().getFloor();
+
+//        CollisionResult collisionWithFloor = CollisionHelper.checkCollision(this, floor);
+//        onGround = collisionWithFloor.inCollision && collisionWithFloor.isAbove();
+
+//        if (!collisionWithFloor.inCollision) {
+//            for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
+//                CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
+//                if (collisionWithPlatform.inCollision && collisionWithPlatform.isAbove()) {
+//                    onGround = true;
+//                    break;
+//                }
+//            }
+//        }
+
+//        if(onGround) {
+//            body.setFill(Color.LIGHTBLUE);
+//        }
+//        else {
+//            body.setFill(Color.RED);
+//        }
+
         state.move();
     }
 
