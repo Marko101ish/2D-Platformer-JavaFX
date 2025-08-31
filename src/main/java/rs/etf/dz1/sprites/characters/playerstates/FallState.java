@@ -63,6 +63,7 @@ public class FallState extends State {
         // they were falling in the previous frame, and weren't in collision with a platform
         if (player.isOnGround() || !wasOnPlatform && player.isOnPlatform()) {
             player.setVelocityY(0);
+            player.setFalling(false);
             player.stop();
         }
         else {

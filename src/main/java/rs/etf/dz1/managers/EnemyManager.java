@@ -27,7 +27,7 @@ public class EnemyManager extends SpriteManager<Enemy> {
         boolean playerIsFalling = player.isFalling();
 
         ownedSprites.forEach(enemy -> {
-            CollisionResult collisionWithPlayer = CollisionHelper.checkCollision(enemy, player);
+            CollisionResult collisionWithPlayer = CollisionHelper.checkCollision(enemy, player, deltaTime);
             // if player is above the enemy, enemy is killed
             if (collisionWithPlayer.inCollision) {
                 if (collisionWithPlayer.isBelow() && playerIsFalling) {
