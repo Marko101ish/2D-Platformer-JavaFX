@@ -34,14 +34,12 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     private static final Paint EYE_COLOR = Color.BLACK;
 
     private State state;
-    private boolean right = true;
-    private double velocityX = 0;
-    private double velocityY = 0;
 
     private Circle body;
     private Circle eye;
 
     private boolean onGround = false;
+    private boolean onPlatform = false;
     private boolean falling = false;
 
     public Player() {
@@ -53,14 +51,6 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         eye.setFill(EYE_COLOR);
         getChildren().add(body);
         getChildren().add(eye);
-    }
-
-    public double getVelocityX() {
-        if (isFaceRight()) {
-            return velocityX;
-        } else {
-            return -velocityX;
-        }
     }
 
     public void setVelocityX(double velocityX) {
@@ -80,18 +70,8 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         body.setFill(RUN_COLOR);
     }
 
-    public void faceRight() {
-        if (isFaceLeft()) {
-            setScaleX(-getScaleX());
-        }
-        right = true;
-    }
-
-    public void faceLeft() {
-        if (isFaceRight()) {
-            setScaleX(-getScaleX());
-        }
-        right = false;
+    public String getState() {
+        return state.toString();
     }
 
     public void jump() {
@@ -120,16 +100,12 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         body.setFill(DEAD_COLOR);
     }
 
-    public boolean isFaceRight() {
-        return right;
-    }
-
-    public boolean isFaceLeft() {
-        return !right;
-    }
-
     public boolean isOnGround() {
         return onGround;
+    }
+
+    public boolean isOnPlatform() {
+        return onPlatform;
     }
 
     public void setFalling(boolean falling) {
@@ -142,18 +118,22 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 
     @Override
     public void update(double deltaTime) {
+        super.update(deltaTime);
+
         Floor floor = Main.getInstance().getFloor();
 
         CollisionResult collisionWithFloor = CollisionHelper.checkCollision(this, floor);
         onGround = collisionWithFloor.inCollision && collisionWithFloor.isAbove();
+        onPlatform = false;
 
-        if (!collisionWithFloor.inCollision) {
-            for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
-                CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
-                if (collisionWithPlatform.inCollision && collisionWithPlatform.isAbove()) {
+        for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
+            CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
+            if (collisionWithPlatform.inCollision) {
+                onPlatform = true;
+                if (collisionWithPlatform.isAbove()) {
                     onGround = true;
-                    break;
                 }
+                break;
             }
         }
 
@@ -164,7 +144,7 @@ public class Player extends Character implements EventHandler<KeyEvent> {
             body.setFill(Color.RED);
         }
 
-        state.move(deltaTime);
+        state.update(deltaTime);
     }
 
     // executed on keyboard input to perform particular actions

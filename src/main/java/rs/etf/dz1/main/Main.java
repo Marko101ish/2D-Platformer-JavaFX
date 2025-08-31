@@ -28,8 +28,8 @@ import rs.etf.dz1.sprites.characters.Player;
 
 public class Main extends Application {
 
-    public static final int WINDOW_WIDTH = 1600;
-    public static final int WINDOW_HEIGHT = 900;
+    public static final int WINDOW_WIDTH = 1280;
+    public static final int WINDOW_HEIGHT = 720;
 
     public static final int FLOOR_WIDTH = WINDOW_WIDTH;
     public static final int FLOOR_HEIGHT = 50;

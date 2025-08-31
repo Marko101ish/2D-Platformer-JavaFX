@@ -15,15 +15,18 @@ public class FallState extends State {
     private static final double STRAFE_SPEED = 450.0f;
     private static final double GRAVITY_ACCELERATION = -30.0f;
 
+    boolean wasOnPlatform;
+
     public FallState(Player player) {
         super(player);
         player.setFalling(true);
+        wasOnPlatform = player.isOnPlatform();
     }
 
     @Override
     public void leftReleased() {
         super.leftReleased();
-        if (player.isFaceLeft()) {
+        if (player.isFacingLeft()) {
             player.setVelocityX(0);
         }
     }
@@ -32,7 +35,7 @@ public class FallState extends State {
     public void leftPressed() {
         super.leftPressed();
         player.faceLeft();
-        player.setVelocityX(STRAFE_SPEED);
+        player.setVelocityX(-STRAFE_SPEED);
     }
 
     @Override
@@ -49,18 +52,21 @@ public class FallState extends State {
     }
 
     @Override
-    public void move(double deltaTime) {
-        double currentVelocityY = player.getVelocityY();
+    public void update(double deltaTime) {
+        super.update(deltaTime);
 
-        player.setTranslateX(player.getTranslateX() + player.getVelocityX() * deltaTime);
-        player.setTranslateY(player.getTranslateY() - currentVelocityY * deltaTime);
+        double newVelocityY = player.getVelocityY() - GRAVITY_ACCELERATION;
+        player.setVelocityY(newVelocityY);
 
-        currentVelocityY += GRAVITY_ACCELERATION;
-        player.setVelocityY(currentVelocityY);
-
-        if (player.isOnGround()) {
+        // Allowing the player to pass through a platform if coming from underneath it
+        // player will collide with the platform only if
+        // they were falling in the previous frame, and weren't in collision with a platform
+        if (player.isOnGround() || !wasOnPlatform && player.isOnPlatform()) {
             player.setVelocityY(0);
             player.stop();
+        }
+        else {
+            wasOnPlatform = player.isOnPlatform();
         }
     }
 

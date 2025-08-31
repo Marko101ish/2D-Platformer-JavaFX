@@ -10,7 +10,7 @@ import rs.etf.dz1.sprites.Platform;
 public class PlatformManager extends SpriteManager<Platform> {
     private static final double MIN_WIDTH = 2 * EnemyManager.ENEMY_WIDTH;
     private static final double MAX_WIDTH = 4 * EnemyManager.ENEMY_WIDTH;
-    private static final double HEIGHT = 20.0;
+    private static final double HEIGHT = 30.0;
 
     // [0, 1]
     private static final double ENEMY_PROBABILITY = 0.33;

@@ -16,17 +16,16 @@ public class JumpState extends State {
     private static final double STRAFE_SPEED = 450.0f;
     private static final double JUMP_VELOCITY = 900.0f;
     private static final double GRAVITY_ACCELERATION = -30.0f;
-    private static final double ACCURACY = 0.01f;
 
     public JumpState(Player player) {
         super(player);
-        player.setVelocityY(JUMP_VELOCITY);
+        player.setVelocityY(-JUMP_VELOCITY);
     }
 
     @Override
     public void leftReleased() {
         super.leftReleased();
-        if (player.isFaceLeft()) {
+        if (player.isFacingLeft()) {
             player.setVelocityX(0);
         }
     }
@@ -35,7 +34,7 @@ public class JumpState extends State {
     public void leftPressed() {
         super.leftPressed();
         player.faceLeft();
-        player.setVelocityX(STRAFE_SPEED);
+        player.setVelocityX(-STRAFE_SPEED);
     }
 
     @Override
@@ -52,17 +51,13 @@ public class JumpState extends State {
     }
 
     @Override
-    public void move(double deltaTime) {
-        double currentVelocityY = player.getVelocityY();
+    public void update(double deltaTime) {
+        super.update(deltaTime);
 
-        player.setTranslateX(player.getTranslateX() + player.getVelocityX() * deltaTime);
-        player.setTranslateY(player.getTranslateY() - currentVelocityY * deltaTime);
+        double newVelocityY = player.getVelocityY() - GRAVITY_ACCELERATION;
+        player.setVelocityY(newVelocityY);
 
-        currentVelocityY += GRAVITY_ACCELERATION;
-        player.setVelocityY(currentVelocityY);
-
-        if (currentVelocityY < ACCURACY) {
-            // Player is starting to fall
+        if (newVelocityY > 0.0f) {
             player.fall();
         }
     }

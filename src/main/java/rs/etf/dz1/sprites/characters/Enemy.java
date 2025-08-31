@@ -21,10 +21,9 @@ public class Enemy extends Character {
     private static final double SPEED = 350.0;
 
     private Platform platform = null;
-    private final double velocity;
 
     public Enemy() {
-        velocity = SPEED;
+        velocityX = -SPEED;
 
         Polygon head = new Polygon();
 
@@ -133,15 +132,6 @@ public class Enemy extends Character {
 
     public void setPlatform(Platform platform) {
         this.platform = platform;
-    }
-
-    @Override
-    public void update(double deltaTime) {
-        double finalVelocity = velocity;
-        if(platform != null) {
-            // Should add two velocities here
-            finalVelocity = platform.getVelocity();
-        }
-        setTranslateX(getTranslateX() - finalVelocity * deltaTime);
+        velocityX = platform.getVelocityX();
     }
 }

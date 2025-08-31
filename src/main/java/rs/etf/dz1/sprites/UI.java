@@ -8,8 +8,6 @@ package rs.etf.dz1.sprites;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
-import rs.etf.dz1.main.Main;
-import rs.etf.dz1.sprites.characters.Player;
 
 import java.time.Duration;
 
@@ -50,11 +48,7 @@ public class UI extends Sprite {
     @Override
     public void update(double deltaTime) {
         updateTimeLeft();
-
-
-        Player player = Main.getInstance().getPlayer();
-        String formatVelocities = String.format("X: %02f, Y: %02f", player.getVelocityX(), player.getVelocityY());
-        fpsLabel.setText(formatVelocities);
+        // fpsLabel.setText("FPS: " + 1./deltaTime);
     }
 
     private void updateTimeLeft() {

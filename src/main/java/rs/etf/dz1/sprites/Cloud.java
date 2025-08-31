@@ -16,10 +16,8 @@ import javafx.scene.transform.Scale;
 public class Cloud extends Sprite {
     private static final double SPEED = 400.0;
 
-    private final double velocity;
-
     public Cloud() {
-        this.velocity = SPEED;
+        this.velocityX = -SPEED;
 
         Circle middleCircle = new Circle(0.6);
         middleCircle.setFill(Color.WHITE);
@@ -36,10 +34,5 @@ public class Cloud extends Sprite {
 
         Scale scale = new Scale(100, 100);
         getTransforms().add(scale);
-    }
-
-    @Override
-    public void update(double deltaTime) {
-        setTranslateX(getTranslateX() - velocity * deltaTime);
     }
 }

@@ -23,14 +23,14 @@ public class Bird extends Sprite {
     private final static double FRAME_DURATION = 1000.0 / 9.0; // 9 fps
     private final static double IMAGE_SCALE = 0.4;
     // -1 to flip, 1 to leave it as is
-    private final static double FLIP_IMAGE = -1.0;
+    private final static boolean FLIP_IMAGE_X = true;
 
     private static final double SPEED = 350.0;
 
-    private final double velocity;
-
     public Bird(SpriteSheet spriteSheet) {
-        velocity = SPEED;
+        super(FLIP_IMAGE_X);
+
+        velocityX = -SPEED;
 
         Rectangle2D[] spriteFrames = spriteSheet.getFrames();
 
@@ -49,12 +49,6 @@ public class Bird extends Sprite {
         timeline.play();
 
         getChildren().add(imageView);
-        setTranslateX(100.0);
-        getTransforms().add(new Scale(FLIP_IMAGE * IMAGE_SCALE, IMAGE_SCALE));
-    }
-
-    @Override
-    public void update(double deltaTime) {
-        setTranslateX(getTranslateX() - velocity * deltaTime);
+        getTransforms().add(new Scale(IMAGE_SCALE, IMAGE_SCALE));
     }
 }

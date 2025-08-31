@@ -16,7 +16,13 @@ public class RunState extends State {
 
     public RunState(Player player) {
         super(player);
-        player.setVelocityX(RUN_SPEED);
+
+        if (player.isFacingRight()) {
+            player.setVelocityX(RUN_SPEED);
+        }
+        else {
+            player.setVelocityX(-RUN_SPEED);
+        }
     }
 
     @Override
@@ -28,7 +34,7 @@ public class RunState extends State {
     @Override
     public void leftReleased() {
         super.leftReleased();
-        if (player.isFaceLeft()) {
+        if (player.isFacingLeft()) {
             player.setVelocityX(0);
         }
     }
@@ -43,7 +49,7 @@ public class RunState extends State {
     @Override
     public void rightReleased() {
         super.rightReleased();
-        if (player.isFaceRight()) {
+        if (player.isFacingRight()) {
             player.setVelocityX(0);
         }
     }
@@ -56,15 +62,15 @@ public class RunState extends State {
     }
 
     @Override
-    public void move(double deltaTime) {
-        double currentVelocityX = player.getVelocityX();
-        player.setTranslateX(player.getTranslateX() + player.getVelocityX() * deltaTime);
+    public void update(double deltaTime) {
+        super.update(deltaTime);
+
         if (!player.isOnGround()) {
             player.fall();
             return;
         }
 
-        if (currentVelocityX == 0) {
+        if (player.getVelocityX() == 0) {
             player.stop();
         }
     }

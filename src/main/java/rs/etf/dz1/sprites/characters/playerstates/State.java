@@ -6,12 +6,13 @@
 package rs.etf.dz1.sprites.characters.playerstates;
 
 import rs.etf.dz1.sprites.characters.Player;
+import rs.etf.dz1.utils.IUpdatable;
 
 /**
  *
  * @author om180345d
  */
-public abstract class State {
+public abstract class State implements IUpdatable {
 
     protected Player player;
     
@@ -36,7 +37,8 @@ public abstract class State {
 
     public void jumpReleased() {
     }
-    
-    public void move(double deltaTime){
+
+    @Override
+    public void update(double deltaTime) {
     }
 }
