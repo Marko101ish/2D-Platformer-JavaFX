@@ -7,6 +7,8 @@ package rs.etf.dz1.sprites.characters.playerstates;
 
 import javafx.animation.*;
 import javafx.geometry.Bounds;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import rs.etf.dz1.sprites.characters.Player;
 
@@ -18,6 +20,7 @@ public class DeadState extends State {
 
     public DeadState(Player player) {
         super(player);
+        player.setFillColor(Color.PURPLE);
 
         RotateTransition rotateTransition = new RotateTransition(Duration.millis(300), player);
         rotateTransition.setByAngle(360);

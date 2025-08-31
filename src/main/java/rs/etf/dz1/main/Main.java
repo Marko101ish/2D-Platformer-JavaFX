@@ -213,7 +213,7 @@ public class Main extends Application {
         SpawnerConfig platformSpawnerConfig = new SpawnerConfig(
                 WINDOW_WIDTH + 200.0,
                 4 * EnemyManager.ENEMY_HEIGHT,
-                WINDOW_HEIGHT - (FLOOR_HEIGHT + 1.2 * EnemyManager.ENEMY_HEIGHT),
+                WINDOW_HEIGHT - (FLOOR_HEIGHT + 1.5 * EnemyManager.ENEMY_HEIGHT),
                 PLATFORM_SPAWN_COOLDOWN
         );
         platformManager = new PlatformManager(platformSpawnerConfig, floorLayer);

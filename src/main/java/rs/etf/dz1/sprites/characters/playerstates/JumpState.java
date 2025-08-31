@@ -5,6 +5,7 @@
  */
 package rs.etf.dz1.sprites.characters.playerstates;
 
+import javafx.scene.paint.Color;
 import rs.etf.dz1.sprites.characters.Player;
 
 /**
@@ -19,6 +20,8 @@ public class JumpState extends State {
 
     public JumpState(Player player) {
         super(player);
+        player.setFillColor(Color.RED);
+
         player.setVelocityY(-JUMP_VELOCITY);
     }
 

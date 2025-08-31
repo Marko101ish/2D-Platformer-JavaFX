@@ -5,6 +5,8 @@
  */
 package rs.etf.dz1.sprites.characters.playerstates;
 
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import rs.etf.dz1.sprites.characters.Player;
 import rs.etf.dz1.utils.IUpdatable;
 

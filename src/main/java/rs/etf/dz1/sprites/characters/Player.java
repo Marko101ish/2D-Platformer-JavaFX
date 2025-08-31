@@ -25,12 +25,6 @@ import rs.etf.dz1.utils.collisions.CollisionResult;
  */
 public class Player extends Character implements EventHandler<KeyEvent> {
 
-    private static final Paint IDLE_COLOR = Color.YELLOW;
-    private static final Paint RUN_COLOR = Color.GREEN;
-    private static final Paint JUMP_COLOR = Color.RED;
-    private static final Paint FALL_COLOR = Color.BLUE;
-    private static final Paint DEAD_COLOR = Color.PURPLE;
-
     private static final Paint EYE_COLOR = Color.BLACK;
 
     private State state;
@@ -43,14 +37,18 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     private boolean falling = false;
 
     public Player() {
-        state = new IdleState(this);
         getChildren().clear();
         body = new Circle(0, 0, 40);
-        body.setFill(IDLE_COLOR);
+        body.setFill(Color.YELLOW);
         eye = new Circle(15, 0, 10);
         eye.setFill(EYE_COLOR);
         getChildren().add(body);
         getChildren().add(eye);
+        state = new IdleState(this);
+    }
+
+    public void setFillColor(Color color) {
+        // body.setFill(color);
     }
 
     public void setVelocityX(double velocityX) {
@@ -67,7 +65,6 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 
     public void run() {
         state = new RunState(this);
-        body.setFill(RUN_COLOR);
     }
 
     public String getState() {
@@ -76,12 +73,10 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 
     public void jump() {
         state = new JumpState(this);
-        body.setFill(JUMP_COLOR);
     }
 
     public void fall() {
         state = new FallState(this);
-        body.setFill(FALL_COLOR);
     }
 
     public void stop() {
@@ -90,14 +85,12 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         }
         else {
             state = new IdleState(this);
-            body.setFill(IDLE_COLOR);
         }
     }
 
     @Override
     public void die() {
         state = new DeadState(this);
-        body.setFill(DEAD_COLOR);
     }
 
     public boolean isOnGround() {
@@ -119,32 +112,35 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     @Override
     public void update(double deltaTime) {
         super.update(deltaTime);
+        state.update(deltaTime);
 
         Floor floor = Main.getInstance().getFloor();
 
         CollisionResult collisionWithFloor = CollisionHelper.checkCollision(this, floor);
         onGround = collisionWithFloor.inCollision && collisionWithFloor.isAbove();
-        onPlatform = false;
 
+        onPlatform = false;
         for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
             CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
             if (collisionWithPlatform.inCollision) {
-                onPlatform = true;
-                if (collisionWithPlatform.isAbove()) {
-                    onGround = true;
+                if(collisionWithPlatform.isBelow()) {
+                    setVelocityY(0.0);
                 }
+                if(collisionWithPlatform.isLeft()) {
+                    if(isGoingRight()) {
+                        setVelocityX(0.0);
+                    }
+                }
+                if(collisionWithPlatform.isRight()) {
+                    if(isGoingLeft()) {
+                        setVelocityX(0.0);
+                    }
+                }
+
+                onPlatform = true;
                 break;
             }
         }
-
-        if(onGround) {
-            body.setFill(Color.LIGHTBLUE);
-        }
-        else {
-            body.setFill(Color.RED);
-        }
-
-        state.update(deltaTime);
     }
 
     // executed on keyboard input to perform particular actions

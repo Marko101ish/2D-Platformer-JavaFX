@@ -25,7 +25,7 @@ public class Bird extends Sprite {
     // -1 to flip, 1 to leave it as is
     private final static boolean FLIP_IMAGE_X = true;
 
-    private static final double SPEED = 350.0;
+    private static final double SPEED = 450.0;
 
     public Bird(SpriteSheet spriteSheet) {
         super(FLIP_IMAGE_X);

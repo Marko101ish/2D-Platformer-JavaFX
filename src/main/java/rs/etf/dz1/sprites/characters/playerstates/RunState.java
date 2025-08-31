@@ -5,6 +5,7 @@
  */
 package rs.etf.dz1.sprites.characters.playerstates;
 
+import javafx.scene.paint.Color;
 import rs.etf.dz1.sprites.characters.Player;
 
 /**
@@ -16,6 +17,7 @@ public class RunState extends State {
 
     public RunState(Player player) {
         super(player);
+        player.setFillColor(Color.GREEN);
 
         if (player.isFacingRight()) {
             player.setVelocityX(RUN_SPEED);

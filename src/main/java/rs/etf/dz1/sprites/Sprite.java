@@ -47,6 +47,22 @@ public abstract class Sprite extends Group implements IUpdatable {
         return !facingRight;
     }
 
+    public boolean isGoingLeft() {
+        return velocityX < 0;
+    }
+
+    public boolean isGoingRight() {
+        return velocityX > 0;
+    }
+
+    public boolean isGoingUp() {
+        return velocityY < 0;
+    }
+
+    public boolean isGoingDown() {
+        return velocityY > 0;
+    }
+
     public void faceRight() {
         if (isFacingLeft()) {
             setScaleX(-getScaleX());

@@ -5,6 +5,7 @@
  */
 package rs.etf.dz1.sprites.characters.playerstates;
 
+import javafx.scene.paint.Color;
 import rs.etf.dz1.sprites.characters.Player;
 
 /**
@@ -15,6 +16,8 @@ public class IdleState extends State {
     
     public IdleState(Player player) {
         super(player);
+        player.setFillColor(Color.YELLOW);
+
         if (player.getVelocityX() != 0) {
             player.run();
         }
