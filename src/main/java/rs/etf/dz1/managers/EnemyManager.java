@@ -9,7 +9,6 @@ public class EnemyManager extends SpriteManager<Enemy> {
     public static final int ENEMY_WIDTH = 100;
     public static final int ENEMY_HEIGHT = 80;
 
-    private static final double ENEMY_SPEED = 350.0;
     private Player player;
 
     public EnemyManager(SpawnerConfig config) {
@@ -39,6 +38,6 @@ public class EnemyManager extends SpriteManager<Enemy> {
 
     @Override
     protected Enemy createSprite() {
-        return new Enemy(ENEMY_SPEED);
+        return new Enemy();
     }
 }

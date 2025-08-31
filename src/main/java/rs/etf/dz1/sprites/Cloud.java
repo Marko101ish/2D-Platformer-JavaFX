@@ -14,11 +14,12 @@ import javafx.scene.transform.Scale;
  * @author om180345d
  */
 public class Cloud extends Sprite {
+    private static final double SPEED = 400.0;
 
     private final double velocity;
 
-    public Cloud(double velocity) {
-        this.velocity = velocity;
+    public Cloud() {
+        this.velocity = SPEED;
 
         Circle middleCircle = new Circle(0.6);
         middleCircle.setFill(Color.WHITE);

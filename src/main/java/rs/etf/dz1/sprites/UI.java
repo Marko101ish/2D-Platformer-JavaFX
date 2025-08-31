@@ -20,6 +20,7 @@ public class UI extends Sprite {
 
     private double timeLeft;
     private final Label gameTimeLabel;
+    private final Label fpsLabel;
 
     public UI(int width, int height, double timeToLive) {
         gameTimeLabel = new Label();
@@ -29,7 +30,13 @@ public class UI extends Sprite {
         gameTimeLabel.setFont(new Font(MAX_FONT_SIZE));
         timeLeft = timeToLive;
 
-        getChildren().add(this.gameTimeLabel);
+        fpsLabel = new Label();
+        fpsLabel.setTranslateX(60);
+        fpsLabel.setTranslateY(20);
+        fpsLabel.setFont(new Font(MAX_FONT_SIZE));
+
+        getChildren().add(gameTimeLabel);
+        // getChildren().add(fpsLabel);
     }
 
     // timeLeft is in seconds
@@ -41,6 +48,8 @@ public class UI extends Sprite {
     @Override
     public void update(double deltaTime) {
         updateTimeLeft();
+
+        // fpsLabel.setText("FPS: " + 1./deltaTime);
     }
 
     private void updateTimeLeft() {

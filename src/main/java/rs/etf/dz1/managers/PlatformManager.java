@@ -10,7 +10,6 @@ public class PlatformManager extends SpriteManager<Platform> {
     private static final double MIN_WIDTH = 2 * EnemyManager.ENEMY_WIDTH;
     private static final double MAX_WIDTH = 4 * EnemyManager.ENEMY_WIDTH;
     private static final double HEIGHT = 20.0;
-    private static final double SPEED = 200.0;
 
     // [0, 1]
     private static final double ENEMY_PROBABILITY = 0.33;
@@ -49,6 +48,6 @@ public class PlatformManager extends SpriteManager<Platform> {
     @Override
     protected Platform createSprite() {
         double width = randomizer.nextDouble() * (MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
-        return new Platform(width, HEIGHT, SPEED);
+        return new Platform(width, HEIGHT);
     }
 }

@@ -12,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-import rs.etf.dz1.cameras.Camera;
 import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.playerstates.DeadState;
 import rs.etf.dz1.sprites.playerstates.IdleState;

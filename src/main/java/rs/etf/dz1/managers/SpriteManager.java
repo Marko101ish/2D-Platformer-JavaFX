@@ -22,7 +22,7 @@ public abstract class SpriteManager<T extends Sprite> extends Sprite {
     public SpriteManager(SpawnerConfig config) {
         this.config = config;
         timeUntilSpawn = 0;
-        randomizer = new Random();
+        randomizer = new Random(System.nanoTime());
     }
 
     @Override

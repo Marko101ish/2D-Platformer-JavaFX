@@ -22,6 +22,11 @@ import rs.etf.dz1.sprites.*;
  *
  * @author om180345d
  */
+
+// For disabling annoying warnings when running the app add these into VM options
+//--enable-native-access=javafx.graphics
+// --sun-misc-unsafe-memory-access=allow
+
 public class Main extends Application {
 
     public static final int WINDOW_WIDTH = 1600;
@@ -124,11 +129,11 @@ public class Main extends Application {
             public void handle(long currentNanoTime) {
                 // Delta time is in seconds
                 double deltaNanoTime = (double) (currentNanoTime - lastFrameNanoTime);
+                lastFrameNanoTime = currentNanoTime;
 
                 // Proper delta time calculation
-                // double deltaTime = deltaNanoTime /
-
-                double deltaTime = 1./60.0;
+                double deltaTime = deltaNanoTime / 1_000_000_000.0;
+                deltaTime = 1./60.0;
                 update(deltaTime);
             }
         }.start();

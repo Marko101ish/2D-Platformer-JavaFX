@@ -17,12 +17,13 @@ import javafx.util.Duration;
  * @author om180345d
  */
 public class Enemy extends Sprite {
+    private static final double SPEED = 350.0;
 
     private Platform platform = null;
     private final double velocity;
 
-    public Enemy(double velocity) {
-        this.velocity = velocity;
+    public Enemy() {
+        velocity = SPEED;
 
         Polygon head = new Polygon();
 
