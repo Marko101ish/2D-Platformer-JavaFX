@@ -18,6 +18,7 @@ import javafx.util.Duration;
  */
 public class Enemy extends Sprite {
 
+    private Platform platform = null;
     private double velocity;
 
     public Enemy(double velocity) {
@@ -128,8 +129,17 @@ public class Enemy extends Sprite {
         getTransforms().add(scale);
     }
 
+    public void setPlatform(Platform platform) {
+        this.platform = platform;
+    }
+
     @Override
     public void update(double deltaTime) {
-        setTranslateX(getTranslateX() - velocity * deltaTime);
+        double finalVelocity = velocity;
+        if(platform != null) {
+            // Should add two velocities here
+            finalVelocity = platform.getVelocity();
+        }
+        setTranslateX(getTranslateX() - finalVelocity * deltaTime);
     }
 }

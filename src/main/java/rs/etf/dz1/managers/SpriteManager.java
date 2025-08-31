@@ -11,7 +11,11 @@ import java.util.Random;
 public abstract class SpriteManager<T extends Sprite> extends Sprite {
     protected List<T> ownedSprites = new LinkedList<T>();
 
-    private final Random randomizer;
+    // This will be true for the duration of the frame
+    // when a new Sprite has been spawned
+    protected boolean justSpawned = false;
+    protected final Random randomizer;
+
     private final SpawnerConfig config;
 
     private double timeUntilSpawn;
@@ -30,6 +34,11 @@ public abstract class SpriteManager<T extends Sprite> extends Sprite {
             timeUntilSpawn = config.spawnCooldown();
 
             spawnSprite(getRandomSpawnPoint());
+
+            justSpawned = true;
+        }
+        else {
+            justSpawned = false;
         }
 
         timeUntilSpawn -= deltaTime;
@@ -38,12 +47,14 @@ public abstract class SpriteManager<T extends Sprite> extends Sprite {
         ownedSprites.forEach(e -> e.update(deltaTime));
     }
 
-    public void spawnSprite(Point2D spawnPoint) {
+    public T spawnSprite(Point2D spawnPoint) {
         T newSprite = createSprite();
-        ownedSprites.add(newSprite);
+        ownedSprites.addLast(newSprite);
         getChildren().add(newSprite);
         newSprite.setTranslateX(spawnPoint.getX());
         newSprite.setTranslateY(spawnPoint.getY());
+
+        return newSprite;
     }
 
     protected abstract T createSprite();

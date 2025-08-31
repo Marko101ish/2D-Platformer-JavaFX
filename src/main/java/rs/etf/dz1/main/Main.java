@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import rs.etf.dz1.cameras.Camera;
 import rs.etf.dz1.managers.EnemyManager;
+import rs.etf.dz1.managers.PlatformManager;
 import rs.etf.dz1.managers.SpawnerConfig;
 import rs.etf.dz1.sprites.*;
 
@@ -32,9 +33,6 @@ public class Main extends Application {
     public static final int FLOOR_WIDTH = WINDOW_WIDTH;
     public static final int FLOOR_HEIGHT = 50;
 
-    public static final int ENEMY_WIDTH = 100;
-    public static final int ENEMY_HEIGHT = 80;
-
     public static final String TITLE = "Platformer";
 
     public static final double TIME_TO_LIVE_S = 60.0;
@@ -44,6 +42,7 @@ public class Main extends Application {
     private List<Platform> platforms;
     private UI ui;
     private EnemyManager enemyManager;
+    private PlatformManager platformManager;
 
     private static Main instance;
     
@@ -67,6 +66,7 @@ public class Main extends Application {
         background.update(deltaTime);
         player.update(deltaTime);
         enemyManager.update(deltaTime);
+        platformManager.update(deltaTime);
         platforms.forEach(e->e.update(deltaTime));
 
         timeLeft = timeLeft - deltaTime;
@@ -88,13 +88,23 @@ public class Main extends Application {
         instance = this;
 
         SpawnerConfig enemySpawnerconfig = new SpawnerConfig(
-                WINDOW_WIDTH + ENEMY_WIDTH,
-                WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2.,
-                WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2.,
+                WINDOW_WIDTH + EnemyManager.ENEMY_WIDTH,
+                WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.,
+                WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.,
                 2.5
         );
 
+        SpawnerConfig platformSpawnerConfig = new SpawnerConfig(
+                WINDOW_WIDTH + 200.0,
+                4 * EnemyManager.ENEMY_HEIGHT,
+                WINDOW_HEIGHT - (FLOOR_HEIGHT + 1.2 * EnemyManager.ENEMY_HEIGHT),
+                2.0
+        );
+
         enemyManager = new EnemyManager(enemySpawnerconfig);
+        platformManager = new PlatformManager(platformSpawnerConfig);
+        platformManager.setEnemyManager(enemyManager);
+
         platforms = new LinkedList<>();
         background = new Background(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -107,22 +117,12 @@ public class Main extends Application {
         Group sprites = new Group();
         camera.getChildren().add(sprites);
 
+        sprites.getChildren().add(platformManager);
         sprites.getChildren().add(enemyManager);
-
-        Random rand =  new Random();
-        // making 10 platforms and adding them to the scene
-        for (int j = 0; j < 10; j++) {
-            Platform platform = new Platform();
-            double platformHeight = rand.nextDouble() * (WINDOW_HEIGHT - 3 * ENEMY_HEIGHT) + ENEMY_HEIGHT;
-            platform.setTranslateX((1 + j) * 300);
-            platform.setTranslateY(platformHeight);
-            sprites.getChildren().add(platform);
-            platforms.add(platform);
-        }
 
         player = new Player(camera);
         player.setTranslateX(100);
-        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - ENEMY_HEIGHT / 2);
+        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2);
         sprites.getChildren().add(player);
         enemyManager.setPlayer(player);
 
@@ -149,12 +149,12 @@ public class Main extends Application {
             public void handle(long currentNanoTime) {
                 // Delta time is in seconds
                 double deltaNanoTime = (double) (currentNanoTime - lastFrameNanoTime);
-                double deltaTime = deltaNanoTime / 1_000_000_000.0;;
-                lastFrameNanoTime = currentNanoTime;
 
-                double fixedDeltaTime = 1./60.0;
+                // Proper delta time calculation
+                // double deltaTime = deltaNanoTime /
 
-                update(fixedDeltaTime);
+                double deltaTime = 1./60.0;
+                update(deltaTime);
             }
         }.start();
     }
