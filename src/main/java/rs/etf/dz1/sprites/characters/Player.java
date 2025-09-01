@@ -48,7 +48,7 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     }
 
     public void setFillColor(Color color) {
-        // body.setFill(color);
+         body.setFill(color);
     }
 
     public void setVelocityX(double velocityX) {
@@ -119,28 +119,32 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         CollisionResult collisionWithFloor = CollisionHelper.checkCollision(this, floor);
         onGround = collisionWithFloor.inCollision && collisionWithFloor.isAbove();
 
-        onPlatform = false;
-        for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
-            CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
-            if (collisionWithPlatform.inCollision) {
-                if(collisionWithPlatform.isBelow()) {
-                    setVelocityY(0.0);
-                }
-                if(collisionWithPlatform.isLeft()) {
-                    if(isGoingRight()) {
-                        setVelocityX(0.0);
-                    }
-                }
-                if(collisionWithPlatform.isRight()) {
-                    if(isGoingLeft()) {
-                        setVelocityX(0.0);
-                    }
-                }
+//        onPlatform = false;
+//        for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
+//            CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
+//            if (collisionWithPlatform.inCollision) {
+//                if(collisionWithPlatform.isBelow()) {
+//                    setVelocityY(0.0);
+//                }
+//                if(collisionWithPlatform.isLeft()) {
+//                    if(isGoingRight()) {
+//                        setVelocityX(0.0);
+//                    }
+//                }
+//                if(collisionWithPlatform.isRight()) {
+//                    if(isGoingLeft()) {
+//                        setVelocityX(0.0);
+//                    }
+//                }
+//
+//                onPlatform = true;
+//                break;
+//            }
+//        }
 
-                onPlatform = true;
-                break;
-            }
-        }
+        // Player stays inside the window
+        setTranslateX(Math.clamp(getTranslateX(), 0.0, 1280));
+        setTranslateY(Math.clamp(getTranslateY(), 0.0, 720));
     }
 
     // executed on keyboard input to perform particular actions
@@ -148,10 +152,10 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     public void handle(KeyEvent event) {
         if ((event.getCode() == KeyCode.RIGHT) && event.getEventType() == KeyEvent.KEY_PRESSED) {
             state.rightPressed();
-        } else if (event.getCode() == KeyCode.RIGHT && event.getEventType() == KeyEvent.KEY_RELEASED) {
-            state.rightReleased();
         } else if (event.getCode() == KeyCode.LEFT && event.getEventType() == KeyEvent.KEY_PRESSED) {
             state.leftPressed();
+        } else if (event.getCode() == KeyCode.RIGHT && event.getEventType() == KeyEvent.KEY_RELEASED) {
+            state.rightReleased();
         } else if (event.getCode() == KeyCode.LEFT && event.getEventType() == KeyEvent.KEY_RELEASED) {
             state.leftReleased();
         } else if (event.getCode() == KeyCode.SPACE && event.getEventType() == KeyEvent.KEY_PRESSED) {
@@ -161,7 +165,7 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         } else if (event.getCode() == KeyCode.DIGIT1 && event.getEventType() == KeyEvent.KEY_PRESSED) {
             Main.getInstance().getCamera().stopFollowing();
         } else if (event.getCode() == KeyCode.DIGIT2 && event.getEventType() == KeyEvent.KEY_PRESSED) {
-            Main.getInstance().getCamera().startFollowing(this);
+            Main.getInstance().getCamera().startFollowing();
         } else if (event.getCode() == KeyCode.DIGIT3 && event.getEventType() == KeyEvent.KEY_PRESSED) {
             
         } else if (event.getCode() == KeyCode.ESCAPE && event.getEventType() == KeyEvent.KEY_PRESSED) {

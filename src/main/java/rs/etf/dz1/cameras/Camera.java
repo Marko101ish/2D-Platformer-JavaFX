@@ -20,7 +20,7 @@ public class Camera extends Group {
     private Node followTarget;
     private final double centerX;
     private final double centerY;
-    private double initialOffsetFromTargetX;
+    private boolean focused = false;
 
     public Camera(int width, int height) {
         this.centerX = width / 2.;
@@ -32,26 +32,27 @@ public class Camera extends Group {
         getTransforms().add(followTranslation);
     }
 
-    public void startFollowing(Node target) {
-        if (target != null) {
-            followTarget = target;
-            Bounds bounds = followTarget.getBoundsInParent();
-            initialOffsetFromTargetX = centerX - bounds.getCenterX();
-        }
+    public void setTarget(Node target) {
+        this.followTarget = target;
+    }
+
+    public void startFollowing() {
+        focused = true;
     }
 
     public void stopFollowing() {
-        followTarget = null;
-        followTranslation.setX(followTranslation.getX() - initialOffsetFromTargetX);
+        focused = false;
         followTranslation.setY(0.0);
     }
 
     public void update(double deltaTime) {
-        if (followTarget != null) {
-            Bounds bounds = followTarget.getBoundsInParent();
+        if (followTarget == null) {
+            return;
+        }
 
-            double translationX = centerX - bounds.getCenterX();
-            double translationY = centerY - bounds.getCenterY();
+        if (focused) {
+            double translationX = centerX - followTarget.getTranslateX();
+            double translationY = centerY - followTarget.getTranslateY();
             followTranslation.setX(translationX);
             followTranslation.setY(translationY);
         }

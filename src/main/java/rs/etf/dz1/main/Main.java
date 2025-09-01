@@ -35,7 +35,7 @@ public class Main extends Application {
     public static final int FLOOR_WIDTH = WINDOW_WIDTH;
     public static final int FLOOR_HEIGHT = 50;
 
-    private static final double PLATFORM_SPAWN_COOLDOWN = 3.5;
+    private static final double PLATFORM_SPAWN_COOLDOWN = 6.0;
     private static final double ENEMY_SPAWN_COOLDOWN = 2.5;
     private static final double CLOUD_SPAWN_COOLDOWN = 1.5;
     private static final double BIRD_SPAWN_COOLDOWN = 4.0;
@@ -188,6 +188,7 @@ public class Main extends Application {
         player.setTranslateX(100);
         player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.);
         playerLayer.getChildren().add(player);
+        camera.setTarget(player);
 
         this.ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE_S);
         uiLayer.getChildren().add(ui);

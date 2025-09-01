@@ -4,7 +4,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
 public class Platform extends Sprite {
-    private static final double SPEED = 200.0;
+    private static final double SPEED = 100.0;
 
     public Platform(double width, double height) {
         velocityX = -SPEED;

@@ -12,6 +12,7 @@ import javafx.scene.shape.*;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import rs.etf.dz1.sprites.Platform;
+import rs.etf.dz1.utils.collisions.CollisionHelper;
 
 /**
  *
@@ -132,6 +133,16 @@ public class Enemy extends Character {
 
     public void setPlatform(Platform platform) {
         this.platform = platform;
-        velocityX = platform.getVelocityX();
+        setVelocityX(getVelocityX() + platform.getVelocityX());
+    }
+
+    @Override
+    public void update(double deltaTime) {
+        super.update(deltaTime);
+        if (platform != null) {
+            if(!CollisionHelper.containsX(platform, this)) {
+                setVelocityX(-getVelocityX() + platform.getVelocityX());
+            }
+        }
     }
 }

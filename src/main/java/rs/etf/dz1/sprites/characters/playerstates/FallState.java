@@ -46,7 +46,9 @@ public class FallState extends State {
     @Override
     public void rightReleased() {
         super.rightReleased();
-        player.setVelocityX(0);
+        if (player.isFacingRight()) {
+            player.setVelocityX(0);
+        }
     }
 
     @Override
