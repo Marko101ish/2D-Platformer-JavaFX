@@ -6,5 +6,15 @@ public record SpawnerConfig(
         double spawnX,
         double minSpawnY,
         double maxSpawnY,
-        double spawnCooldown) {
+        double spawnCooldown,
+        double initialCooldown) {
+
+    public SpawnerConfig(
+            double spawnX,
+            double minSpawnY,
+            double maxSpawnY,
+            double spawnCooldown
+    ) {
+        this(spawnX, minSpawnY, maxSpawnY, spawnCooldown, 0.0);
+    }
 }

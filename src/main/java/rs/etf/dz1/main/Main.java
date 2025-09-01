@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import rs.etf.dz1.cameras.Camera;
 import rs.etf.dz1.managers.*;
 import rs.etf.dz1.sprites.*;
+import rs.etf.dz1.sprites.characters.Enemy;
 import rs.etf.dz1.sprites.characters.Player;
 import rs.etf.dz1.utils.TimeHelper;
 
@@ -39,6 +40,7 @@ public class Main extends Application {
     private static final double ENEMY_SPAWN_COOLDOWN = 2.5;
     private static final double CLOUD_SPAWN_COOLDOWN = 1.5;
     private static final double BIRD_SPAWN_COOLDOWN = 4.0;
+    private static final double COIN_SPAWN_COOLDOWN = 15.0;
 
     public static final String TITLE = "Platformer";
 
@@ -47,6 +49,7 @@ public class Main extends Application {
     private static Main instance;
 
     private boolean isPaused = false;
+    private double timeMultiplier = 1.0;
 
     private Group bgLayer;
     private Group floorLayer;
@@ -60,6 +63,7 @@ public class Main extends Application {
     private EnemyManager enemyManager;
     private CloudManager cloudManager;
     private BirdManager birdManager;
+    private CoinManager coinManager;
     private UI ui;
     
     private long lastFrameNanoTime;
@@ -98,15 +102,25 @@ public class Main extends Application {
         else {
             pauseGame();
         }
+
+        isPaused = !isPaused;
+    }
+
+    public void speedUpGame() {
+        timeMultiplier = Math.min(timeMultiplier + 0.25, 1.75);
+    }
+
+    public void slowDownGame() {
+        timeMultiplier = Math.max(timeMultiplier - 0.5, 0.0);
     }
 
     public void pauseGame() {
-        isPaused = true;
+        timeMultiplier = 0;
     }
 
     public void resumeGame() {
         this.lastFrameNanoTime = System.nanoTime();
-        isPaused = false;
+        timeMultiplier = 1.0;
     }
 
     @Override
@@ -129,9 +143,7 @@ public class Main extends Application {
                 // Proper delta time calculation
                 double deltaTime = deltaNanoTime / 1_000_000_000.0;
                 deltaTime = 1./60.0;
-                if (isPaused) {
-                    deltaTime = 0;
-                }
+                deltaTime *= timeMultiplier;
 
                 TimeHelper.setDeltaTime(deltaTime);
                 update(deltaTime);
@@ -155,6 +167,7 @@ public class Main extends Application {
         enemyManager.update(deltaTime);
         cloudManager.update(deltaTime);
         birdManager.update(deltaTime);
+        coinManager.update(deltaTime);
         camera.update(deltaTime);
 
         ui.setTimeLeft(timeLeft);
@@ -186,7 +199,7 @@ public class Main extends Application {
 
         player = new Player();
         player.setTranslateX(100);
-        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.);
+        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - Enemy.ENEMY_HEIGHT / 2.);
         playerLayer.getChildren().add(player);
         camera.setTarget(player);
 
@@ -213,16 +226,16 @@ public class Main extends Application {
     void initManagers() {
         SpawnerConfig platformSpawnerConfig = new SpawnerConfig(
                 WINDOW_WIDTH + 200.0,
-                4 * EnemyManager.ENEMY_HEIGHT,
-                WINDOW_HEIGHT - (FLOOR_HEIGHT + 1.5 * EnemyManager.ENEMY_HEIGHT),
+                4 * Enemy.ENEMY_HEIGHT,
+                WINDOW_HEIGHT - (FLOOR_HEIGHT + 1.5 * Enemy.ENEMY_HEIGHT),
                 PLATFORM_SPAWN_COOLDOWN
         );
         platformManager = new PlatformManager(platformSpawnerConfig, floorLayer);
 
         SpawnerConfig enemySpawnerconfig = new SpawnerConfig(
-                WINDOW_WIDTH + EnemyManager.ENEMY_WIDTH,
-                WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.,
-                WINDOW_HEIGHT - FLOOR_HEIGHT - EnemyManager.ENEMY_HEIGHT / 2.,
+                WINDOW_WIDTH + Enemy.ENEMY_WIDTH,
+                WINDOW_HEIGHT - FLOOR_HEIGHT,
+                WINDOW_HEIGHT - FLOOR_HEIGHT,
                 ENEMY_SPAWN_COOLDOWN
         );
         enemyManager = new EnemyManager(enemySpawnerconfig, characterLayer);
@@ -242,6 +255,16 @@ public class Main extends Application {
                 BIRD_SPAWN_COOLDOWN
         );
         birdManager = new BirdManager(birdSpawnConfig, bgLayer);
+
+        SpawnerConfig coinSpawnerconfig = new SpawnerConfig(
+                WINDOW_WIDTH + Enemy.ENEMY_WIDTH,
+                WINDOW_HEIGHT - FLOOR_HEIGHT,
+                WINDOW_HEIGHT - FLOOR_HEIGHT,
+                COIN_SPAWN_COOLDOWN,
+                COIN_SPAWN_COOLDOWN
+        );
+
+        coinManager = new CoinManager(coinSpawnerconfig, playerLayer);
     }
 
     /**

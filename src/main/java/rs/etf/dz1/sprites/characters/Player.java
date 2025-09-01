@@ -170,6 +170,10 @@ public class Player extends Character implements EventHandler<KeyEvent> {
             
         } else if (event.getCode() == KeyCode.ESCAPE && event.getEventType() == KeyEvent.KEY_PRESSED) {
             Main.getInstance().togglePause();
+        } else if (event.getCode() == KeyCode.F1 && event.getEventType() == KeyEvent.KEY_PRESSED) {
+            Main.getInstance().slowDownGame();
+        } else if (event.getCode() == KeyCode.F2 && event.getEventType() == KeyEvent.KEY_PRESSED) {
+            Main.getInstance().speedUpGame();
         }
     }
 }

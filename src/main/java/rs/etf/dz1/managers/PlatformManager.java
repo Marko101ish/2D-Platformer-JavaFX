@@ -8,8 +8,8 @@ import rs.etf.dz1.sprites.characters.Enemy;
 import rs.etf.dz1.sprites.Platform;
 
 public class PlatformManager extends SpriteManager<Platform> {
-    private static final double MIN_WIDTH = 2.5 * EnemyManager.ENEMY_WIDTH;
-    private static final double MAX_WIDTH = 4.5 * EnemyManager.ENEMY_WIDTH;
+    private static final double MIN_WIDTH = 2.5 * Enemy.ENEMY_WIDTH;
+    private static final double MAX_WIDTH = 4.5 * Enemy.ENEMY_WIDTH;
     private static final double HEIGHT = 30.0;
 
     // [0, 1]
@@ -37,9 +37,10 @@ public class PlatformManager extends SpriteManager<Platform> {
         if (randomizer.nextDouble() < ENEMY_PROBABILITY) {
             Platform spawnedPlatform = ownedSprites.getLast();
             Bounds platformBounds = spawnedPlatform.getBoundsInParent();
+
             Point2D spawnPoint = new Point2D(
-                    platformBounds.getMaxX() - EnemyManager.ENEMY_WIDTH / 2.0,
-                    platformBounds.getMinY() - EnemyManager.ENEMY_HEIGHT / 2.0
+                    platformBounds.getMaxX(),
+                    platformBounds.getMinY()
             );
             Enemy spawnedEnemy = enemyManager.spawnSprite(spawnPoint);
             spawnedEnemy.setPlatform(spawnedPlatform);

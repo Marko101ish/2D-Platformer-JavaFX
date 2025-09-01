@@ -8,7 +8,9 @@ package rs.etf.dz1.sprites.characters;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import rs.etf.dz1.sprites.Platform;
@@ -19,6 +21,9 @@ import rs.etf.dz1.utils.collisions.CollisionHelper;
  * @author om180345d
  */
 public class Enemy extends Character {
+    public static final int ENEMY_WIDTH = 100;
+    public static final int ENEMY_HEIGHT = 80;
+
     private static final double SPEED = 350.0;
 
     private Platform platform = null;
@@ -127,7 +132,7 @@ public class Enemy extends Character {
         rightPupilTransition.setCycleCount(Timeline.INDEFINITE);
         rightPupilTransition.play();
 
-        Scale scale = new Scale(100, 80);
+        Scale scale = new Scale(ENEMY_WIDTH, ENEMY_HEIGHT);
         getTransforms().add(scale);
     }
 

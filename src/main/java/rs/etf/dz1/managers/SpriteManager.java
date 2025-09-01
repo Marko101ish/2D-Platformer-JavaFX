@@ -29,7 +29,7 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
         this.config = config;
         this.layer = layer;
 
-        timeUntilSpawn = 0;
+        timeUntilSpawn = config.initialCooldown();
         randomizer = new Random(System.nanoTime());
     }
 
@@ -65,8 +65,9 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
         ownedSprites.addLast(newSprite);
         layer.getChildren().add(newSprite);
 
-        newSprite.setTranslateX(spawnPoint.getX());
-        newSprite.setTranslateY(spawnPoint.getY());
+        Bounds bounds = newSprite.getBoundsInParent();
+        newSprite.setTranslateX(spawnPoint.getX() - bounds.getWidth() / 2.0);
+        newSprite.setTranslateY(spawnPoint.getY() - bounds.getHeight() / 2.0);
 
         return newSprite;
     }

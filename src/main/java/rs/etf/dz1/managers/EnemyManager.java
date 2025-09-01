@@ -8,9 +8,6 @@ import rs.etf.dz1.utils.collisions.CollisionHelper;
 import rs.etf.dz1.utils.collisions.CollisionResult;
 
 public class EnemyManager extends SpriteManager<Enemy> {
-    public static final int ENEMY_WIDTH = 100;
-    public static final int ENEMY_HEIGHT = 80;
-
     public EnemyManager(SpawnerConfig config, Group layer) {
         super(config, layer);
     }
