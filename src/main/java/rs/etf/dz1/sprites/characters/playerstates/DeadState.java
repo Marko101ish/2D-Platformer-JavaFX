@@ -21,10 +21,12 @@ public class DeadState extends State {
     public DeadState(Player player) {
         super(player);
         player.setFillColor(Color.PURPLE);
+        player.setVelocityX(0);
+        player.setVelocityY(0);
 
         RotateTransition rotateTransition = new RotateTransition(Duration.millis(300), player);
         rotateTransition.setByAngle(360);
-        rotateTransition.setCycleCount(Timeline.INDEFINITE);
+        rotateTransition.setCycleCount(4);
         rotateTransition.setInterpolator(Interpolator.LINEAR);
         rotateTransition.play();
 
@@ -45,5 +47,6 @@ public class DeadState extends State {
 
         Timeline animTimeline = new Timeline(kf0, kf1, kf2);
         animTimeline.play();
+        animTimeline.setOnFinished(event -> { System.out.println("RESPAWN OR GAMEOVER"); });
     }
 }
