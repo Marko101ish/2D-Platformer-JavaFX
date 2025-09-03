@@ -24,9 +24,11 @@ public class Coin extends Sprite {
     private final static double GROUND_OFFSET = 250.0;
 
     private static final double SPEED = 150.0;
+    private  final int coinValue;
 
-    public Coin(SpriteSheet spriteSheet) {
+    public Coin(SpriteSheet spriteSheet, int coinValue) {
         velocityX = -SPEED;
+        this.coinValue = coinValue;
 
         Rectangle2D[] spriteFrames = spriteSheet.getFrames();
 
@@ -53,5 +55,9 @@ public class Coin extends Sprite {
         floatingAnimation.setCycleCount(Timeline.INDEFINITE);
         floatingAnimation.setAutoReverse(true);
         floatingAnimation.play();
+    }
+
+    public int  getCoinValue() {
+        return coinValue;
     }
 }

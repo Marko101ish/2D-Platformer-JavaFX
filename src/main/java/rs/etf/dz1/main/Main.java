@@ -68,6 +68,8 @@ public class Main extends Application {
     
     private long lastFrameNanoTime;
     private double timeLeft = TIME_TO_LIVE_S;
+    private int oldTimeLeft = (int) TIME_TO_LIVE_S;
+    private int score = 0;
 
     private Camera camera; // camera used for applying transformations
     
@@ -123,6 +125,10 @@ public class Main extends Application {
         timeMultiplier = 1.0;
     }
 
+    public void addPoints(int points) {
+        this.score += points;
+    }
+
     @Override
     public void start(Stage primaryStage) {
         instance = this;
@@ -155,6 +161,13 @@ public class Main extends Application {
     // deltaTime is in milliseconds here
     private void update(double deltaTime) {
         timeLeft = timeLeft - deltaTime;
+        final int secondsPassed = oldTimeLeft - (int)timeLeft;
+        if (secondsPassed > 0) {
+            score += secondsPassed;
+            oldTimeLeft = (int) timeLeft;
+        }
+
+
 
         // When there's no time left the game closes automatically
         if(timeLeft < 0)
@@ -170,7 +183,8 @@ public class Main extends Application {
         coinManager.update(deltaTime);
         camera.update(deltaTime);
 
-        ui.setTimeLeft(timeLeft);
+        ui.setTimeLeft((int) timeLeft);
+        ui.setScore(score);
         ui.update(deltaTime);
     }
 

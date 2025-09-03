@@ -12,6 +12,7 @@ public class CoinManager  extends SpriteManager<Coin> {
     private static final String COIN_SPRITE_SHEET_FILE = "/rs/etf/dz1/images/coin_sprite_sheet.png";
     private static final int SHEET_ROWS = 2;
     private static final int SHEET_COLS = 4;
+    private static final int COIN_VALUE = 30;
 
     private final SpriteSheet coinSpriteSheet;
 
@@ -33,6 +34,7 @@ public class CoinManager  extends SpriteManager<Coin> {
         ownedSprites.forEach(coin -> {
             CollisionResult collisionWithPlayer = CollisionHelper.checkCollision(coin, player);
             if (collisionWithPlayer.inCollision) {
+                Main.getInstance().addPoints(coin.getCoinValue());
                 readyForRemoval.add(coin);
             }
         });
@@ -45,6 +47,6 @@ public class CoinManager  extends SpriteManager<Coin> {
             return null;
         }
 
-        return new Coin(coinSpriteSheet);
+        return new Coin(coinSpriteSheet, COIN_VALUE);
     }
 }

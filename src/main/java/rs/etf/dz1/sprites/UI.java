@@ -17,38 +17,53 @@ import java.time.Duration;
  */
 public class UI extends Sprite {
     private static final double MAX_FONT_SIZE = 20.0;
+    private int timeLeft = 0;
+    private int score = 0;
 
-    private double timeLeft;
     private final Label gameTimeLabel;
+    private final Label scoreLabel;
     private final Label fpsLabel;
 
     public UI(int width, int height, double timeToLive) {
+        Font uiFont = new Font(MAX_FONT_SIZE);
+
         gameTimeLabel = new Label();
         gameTimeLabel.setTranslateX(width / 2.0);
         gameTimeLabel.setTranslateY(20);
         gameTimeLabel.setAlignment(Pos.CENTER);
-        gameTimeLabel.setFont(new Font(MAX_FONT_SIZE));
-        timeLeft = timeToLive;
+        gameTimeLabel.setFont(uiFont);
+        timeLeft = (int) timeToLive;
+
+        scoreLabel = new Label();
+        scoreLabel.setTranslateX(60.0);
+        scoreLabel.setTranslateY(20.0);
+        scoreLabel.setAlignment(Pos.CENTER);
+        scoreLabel.setFont(uiFont);
 
         fpsLabel = new Label();
         fpsLabel.setTranslateX(60);
-        fpsLabel.setTranslateY(20);
-        fpsLabel.setFont(new Font(MAX_FONT_SIZE));
+        fpsLabel.setTranslateY(60);
+        fpsLabel.setFont(uiFont);
 
         getChildren().add(gameTimeLabel);
-        getChildren().add(fpsLabel);
+        getChildren().add(scoreLabel);
+        // getChildren().add(fpsLabel);
     }
 
     // timeLeft is in seconds
-    public void setTimeLeft(double timeLeft)
-    {
+    public void setTimeLeft(int timeLeft) {
         this.timeLeft = timeLeft;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     @Override
     public void update(double deltaTime) {
         updateTimeLeft();
-        // fpsLabel.setText("FPS: " + 1./deltaTime);
+        updateScore();
+        fpsLabel.setText("FPS: " + 1./deltaTime);
     }
 
     private void updateTimeLeft() {
@@ -58,5 +73,9 @@ public class UI extends Sprite {
 
         String formattedDuration = String.format("%02d:%02d", minutes, seconds);
         gameTimeLabel.setText("Time left: " + formattedDuration);
+    }
+
+    private void updateScore() {
+        scoreLabel.setText("Points earned: " + score);
     }
 }
