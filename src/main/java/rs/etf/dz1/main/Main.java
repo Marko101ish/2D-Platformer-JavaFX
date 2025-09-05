@@ -116,8 +116,6 @@ public class Main extends Application implements EventHandler<Event> {
         else {
             pauseGame();
         }
-
-        isPaused = !isPaused;
     }
 
     public void speedUpGame() {
@@ -125,16 +123,15 @@ public class Main extends Application implements EventHandler<Event> {
     }
 
     public void slowDownGame() {
-        timeMultiplier = Math.max(timeMultiplier - 0.5, 0.0);
+        timeMultiplier = Math.max(timeMultiplier - 0.5, 0.25);
     }
 
     public void pauseGame() {
-        timeMultiplier = 0;
+        isPaused = true;
     }
 
     public void resumeGame() {
-        this.lastFrameNanoTime = System.nanoTime();
-        timeMultiplier = 1.0;
+        isPaused = false;
     }
 
     public void addPoints(int points) {
@@ -162,9 +159,11 @@ public class Main extends Application implements EventHandler<Event> {
                 double deltaTime = deltaNanoTime / 1_000_000_000.0;
                 deltaTime = 1./60.0;
                 deltaTime *= timeMultiplier;
-
                 TimeHelper.setDeltaTime(deltaTime);
-                update();
+
+                if (!isPaused) {
+                    update();
+                }
             }
         }.start();
     }
