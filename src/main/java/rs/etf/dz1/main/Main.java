@@ -20,6 +20,7 @@ import rs.etf.dz1.managers.*;
 import rs.etf.dz1.sprites.*;
 import rs.etf.dz1.sprites.characters.Enemy;
 import rs.etf.dz1.sprites.characters.Player;
+import rs.etf.dz1.sprites.ui.UI;
 import rs.etf.dz1.utils.InvulnerabilityType;
 import rs.etf.dz1.utils.TimeHelper;
 
@@ -194,6 +195,7 @@ public class Main extends Application implements EventHandler<Event> {
 
         ui.setTimeLeft((int) timeLeft);
         ui.setScore(score);
+        ui.setNumOfLives(livesLeft);
         ui.update(deltaTime);
     }
 
