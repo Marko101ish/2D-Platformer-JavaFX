@@ -42,6 +42,7 @@ public class Main extends Application implements EventHandler<Event> {
 
     public static final int FLOOR_WIDTH = WINDOW_WIDTH;
     public static final int FLOOR_HEIGHT = 50;
+    public static final int FLOOR_ROWS = 8;
 
     private static final double PLATFORM_SPAWN_COOLDOWN = 6.0;
     private static final double ENEMY_SPAWN_COOLDOWN = 2.5;
@@ -231,7 +232,7 @@ public class Main extends Application implements EventHandler<Event> {
         SkyBox skyBox = new SkyBox(WINDOW_WIDTH, WINDOW_HEIGHT);
         bgLayer.getChildren().add(skyBox);
 
-        floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT);
+        floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT, FLOOR_ROWS);
         floor.setTranslateY(WINDOW_HEIGHT);
         floorLayer.getChildren().add(floor);
 

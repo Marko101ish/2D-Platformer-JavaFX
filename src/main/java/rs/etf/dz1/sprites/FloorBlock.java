@@ -17,9 +17,15 @@ import java.util.Random;
  */
 public class FloorBlock extends Sprite {
 
-    public FloorBlock() {
-        Polygon foreground = new Polygon();
+    public FloorBlock(boolean isOnSurface) {
+        Rectangle background = new Rectangle(-0.5, -0.5, 1, 1);
+        background.setFill(Color.SIENNA);
+        getChildren().add(background);
+        if (!isOnSurface) {
+            return;
+        }
 
+        Polygon foreground = new Polygon();
         // Grass polygon
         //        1                       7  ======== y =  -0.5  - top of the block
         //              3           5        ======== y = -0.25 - quarter from top
@@ -36,11 +42,7 @@ public class FloorBlock extends Sprite {
                   0.5,  -0.5,   // 7
         });
 
-        Rectangle background = new Rectangle(-0.5, -0.5, 1, 1);
-        Random rand = new Random();
-        background.setFill(Color.SIENNA);
         foreground.setFill(Color.LAWNGREEN);
-        getChildren().add(background);
         getChildren().add(foreground);
     }
 
