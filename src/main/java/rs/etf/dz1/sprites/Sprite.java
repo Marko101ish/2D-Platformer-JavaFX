@@ -86,4 +86,9 @@ public abstract class Sprite extends Group implements IUpdatable {
         setTranslateX(getTranslateX() + getVelocityX() * deltaTime);
         setTranslateY(getTranslateY() + getVelocityY() * deltaTime);
     }
+
+    // For managed sprite this is called after they've spawned
+    // can be used to init animations that depend on the spawn point
+    public void onInit() {
+    }
 }

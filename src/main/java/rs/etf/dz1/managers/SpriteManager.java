@@ -70,8 +70,11 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
         layer.getChildren().add(newSprite);
 
         Bounds bounds = newSprite.getBoundsInParent();
+
         newSprite.setTranslateX(spawnPoint.getX() - bounds.getWidth() / 2.0);
         newSprite.setTranslateY(spawnPoint.getY() - bounds.getHeight() / 2.0);
+
+        newSprite.onInit();
 
         return newSprite;
     }

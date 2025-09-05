@@ -3,28 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rs.etf.dz1.sprites;
+package rs.etf.dz1.sprites.collectibles;
 
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import rs.etf.dz1.main.Main;
+import rs.etf.dz1.sprites.characters.Character;
 import rs.etf.dz1.utils.SpriteSheet;
 
 /**
  *
  * @author om180345d
  */
-public class Coin extends Sprite {
+public class Coin extends Collectible {
     private final static double FRAME_DURATION = 1000.0 / 9.0; // 9 fps
     private final static double IMAGE_SCALE = 0.25;
     private final static double GROUND_OFFSET = 250.0;
 
     private static final double SPEED = 150.0;
-    private  final int coinValue;
+    private final int coinValue;
 
     public Coin(SpriteSheet spriteSheet, int coinValue) {
         velocityX = -SPEED;
@@ -49,15 +53,9 @@ public class Coin extends Sprite {
         getChildren().add(imageView);
         getTransforms().add(new Scale(IMAGE_SCALE, IMAGE_SCALE));
         getTransforms().add(new Translate(0.0, -GROUND_OFFSET));
-
-        TranslateTransition floatingAnimation = new TranslateTransition(Duration.millis(400.0), imageView);
-        floatingAnimation.setByY(65.0);
-        floatingAnimation.setCycleCount(Timeline.INDEFINITE);
-        floatingAnimation.setAutoReverse(true);
-        floatingAnimation.play();
     }
 
-    public int  getCoinValue() {
-        return coinValue;
+    protected void onCollected(Character character) {
+        Main.getInstance().addPoints(coinValue);
     }
 }

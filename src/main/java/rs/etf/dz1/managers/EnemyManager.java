@@ -8,6 +8,8 @@ import rs.etf.dz1.utils.collisions.CollisionHelper;
 import rs.etf.dz1.utils.collisions.CollisionResult;
 
 public class EnemyManager extends SpriteManager<Enemy> {
+    private static int ENEMY_DEATH_POINTS = 15;
+
     public EnemyManager(SpawnerConfig config, Group layer) {
         super(config, layer);
     }
@@ -27,14 +29,15 @@ public class EnemyManager extends SpriteManager<Enemy> {
             CollisionResult collisionWithPlayer = CollisionHelper.checkCollision(enemy, player);
             // if player is above the enemy, enemy is killed
             if (collisionWithPlayer.inCollision) {
-                if (collisionWithPlayer.isBelow() && playerIsFalling) {
+                if (player.isImmune() || (collisionWithPlayer.isBelow() && playerIsFalling)) {
                     enemy.takeHit();
                     if (!enemy.isAlive()) {
+                        Main.getInstance().addPoints(ENEMY_DEATH_POINTS);
                         readyForRemoval.add(enemy);
                     }
                 }
                 else {
-                     player.takeHit();
+                     // player.takeHit();
                 }
             }
         });

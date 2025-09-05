@@ -16,7 +16,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import javafx.util.Duration;
-import rs.etf.dz1.events.PlayerDiedEvent;
 import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Floor;
 import rs.etf.dz1.sprites.Platform;
@@ -130,6 +129,26 @@ public class Player extends Character implements EventHandler<KeyEvent> {
             Timeline respawnAnimation = new Timeline(kf0, kf1);
             respawnAnimation.setCycleCount(Timeline.INDEFINITE);
             setInvulnerabilityAnimation(respawnAnimation);
+        }
+        else if (type == InvulnerabilityType.IMMUNITY_COIN) {
+            Circle invulnerabilityCircle = new Circle(0, 0, 45);
+            invulnerabilityCircle.setFill(Color.PURPLE);
+            invulnerabilityCircle.setOpacity(0.5);
+
+            KeyValue kvin0 = new KeyValue(invulnerabilityCircle.fillProperty(), Color.LIGHTPINK);
+            KeyValue kvin1 = new KeyValue(invulnerabilityCircle.fillProperty(), Color.PURPLE);
+
+            Duration durin0 = Duration.millis(0);
+            Duration durin1 = Duration.millis(1000);
+
+            KeyFrame kfin0 = new KeyFrame(durin0, kvin0);
+            KeyFrame kfin1 = new KeyFrame(durin1, kvin1);
+
+            Timeline immunityAnimation = new Timeline(kfin0, kfin1);
+            immunityAnimation.setCycleCount(Timeline.INDEFINITE);
+
+            setInvulnerabilityVisual(invulnerabilityCircle);
+            setInvulnerabilityAnimation(immunityAnimation);
         }
     }
 

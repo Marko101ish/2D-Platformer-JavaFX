@@ -46,7 +46,7 @@ public class Main extends Application implements EventHandler<Event> {
     private static final double ENEMY_SPAWN_COOLDOWN = 2.5;
     private static final double CLOUD_SPAWN_COOLDOWN = 1.5;
     private static final double BIRD_SPAWN_COOLDOWN = 4.0;
-    private static final double COIN_SPAWN_COOLDOWN = 15.0;
+    private static final double COLLECTIBLE_SPAWN_COOLDOWN = 10.0;
 
     private static final int PLAYER_STARTING_LIVES = 3;
 
@@ -74,7 +74,7 @@ public class Main extends Application implements EventHandler<Event> {
     private EnemyManager enemyManager;
     private CloudManager cloudManager;
     private BirdManager birdManager;
-    private CoinManager coinManager;
+    private CollectibleManager collectibleManager;
     private SoundManager soundManager;
     private UI ui;
     
@@ -190,7 +190,7 @@ public class Main extends Application implements EventHandler<Event> {
         enemyManager.update(deltaTime);
         cloudManager.update(deltaTime);
         birdManager.update(deltaTime);
-        coinManager.update(deltaTime);
+        collectibleManager.update(deltaTime);
         camera.update(deltaTime);
 
         ui.setTimeLeft((int) timeLeft);
@@ -278,15 +278,15 @@ public class Main extends Application implements EventHandler<Event> {
         );
         birdManager = new BirdManager(birdSpawnConfig, bgLayer);
 
-        SpawnerConfig coinSpawnerconfig = new SpawnerConfig(
+        SpawnerConfig collectibleSpawnerconfig = new SpawnerConfig(
                 WINDOW_WIDTH + Enemy.ENEMY_WIDTH,
-                WINDOW_HEIGHT - FLOOR_HEIGHT,
-                WINDOW_HEIGHT - FLOOR_HEIGHT,
-                COIN_SPAWN_COOLDOWN,
-                COIN_SPAWN_COOLDOWN
+                WINDOW_HEIGHT - FLOOR_HEIGHT - Enemy.ENEMY_HEIGHT * 0.2,
+                WINDOW_HEIGHT - FLOOR_HEIGHT - Enemy.ENEMY_HEIGHT * 0.2,
+                COLLECTIBLE_SPAWN_COOLDOWN,
+                COLLECTIBLE_SPAWN_COOLDOWN
         );
 
-        coinManager = new CoinManager(coinSpawnerconfig, playerLayer);
+        collectibleManager = new CollectibleManager(collectibleSpawnerconfig, playerLayer);
 
         soundManager = new SoundManager();
     }

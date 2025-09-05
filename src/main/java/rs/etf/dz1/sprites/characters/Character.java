@@ -1,6 +1,7 @@
 package rs.etf.dz1.sprites.characters;
 
 import javafx.animation.Animation;
+import javafx.scene.Node;
 import rs.etf.dz1.sprites.Sprite;
 import rs.etf.dz1.utils.InvulnerabilityType;
 
@@ -9,6 +10,7 @@ public abstract class Character extends Sprite {
     private double invulnerabilityTimeLeft = 0;
     private InvulnerabilityType invulnerabilityType = InvulnerabilityType.NONE;
     private Animation invulnerabilityAnimation;
+    private Node invulnerabilityVisual;
 
     public Character() {
 
@@ -36,6 +38,10 @@ public abstract class Character extends Sprite {
 
     public boolean isInvulnerable() {
         return invulnerabilityType != InvulnerabilityType.NONE;
+    }
+
+    public boolean isImmune() {
+        return invulnerabilityType == InvulnerabilityType.IMMUNITY_COIN;
     }
 
     public void giveInvulnerability(InvulnerabilityType type, double duration) {
@@ -76,12 +82,19 @@ public abstract class Character extends Sprite {
         this.invulnerabilityAnimation = invulnerabilityAnimation;
     }
 
+    protected void setInvulnerabilityVisual(Node invulnerabilityVisual) {
+        this.invulnerabilityVisual = invulnerabilityVisual;
+    }
+
     private void invulnerabilityGainedInternal(InvulnerabilityType type, double duration) {
         invulnerabilityTimeLeft = duration;
         invulnerabilityType = type;
 
         onInvulnerabilityGained(invulnerabilityType);
 
+        if (invulnerabilityVisual != null) {
+            getChildren().add(invulnerabilityVisual);
+        }
         if (invulnerabilityAnimation != null) {
             invulnerabilityAnimation.play();
         }
@@ -90,6 +103,9 @@ public abstract class Character extends Sprite {
     private void invulnerabilityLostInternal() {
         if (invulnerabilityAnimation != null) {
             invulnerabilityAnimation.stop();
+        }
+        if (invulnerabilityVisual != null) {
+            getChildren().remove(invulnerabilityVisual);
         }
 
         onInvulnerabilityLost(invulnerabilityType);
