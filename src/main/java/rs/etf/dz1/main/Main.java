@@ -25,7 +25,8 @@ import rs.etf.dz1.utils.TimeHelper;
  */
 
 // For disabling annoying warnings when running the app add these into VM options
-//--enable-native-access=javafx.graphics
+// --enable-native-access=javafx.graphics
+// --enable-native-access=javafx.media
 // --sun-misc-unsafe-memory-access=allow
 
 public class Main extends Application {
@@ -64,6 +65,7 @@ public class Main extends Application {
     private CloudManager cloudManager;
     private BirdManager birdManager;
     private CoinManager coinManager;
+    private SoundManager soundManager;
     private UI ui;
     
     private long lastFrameNanoTime;
@@ -279,6 +281,8 @@ public class Main extends Application {
         );
 
         coinManager = new CoinManager(coinSpawnerconfig, playerLayer);
+
+        soundManager = new SoundManager();
     }
 
     /**

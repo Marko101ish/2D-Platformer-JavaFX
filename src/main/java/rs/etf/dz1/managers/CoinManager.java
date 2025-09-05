@@ -9,7 +9,7 @@ import rs.etf.dz1.utils.collisions.CollisionHelper;
 import rs.etf.dz1.utils.collisions.CollisionResult;
 
 public class CoinManager  extends SpriteManager<Coin> {
-    private static final String COIN_SPRITE_SHEET_FILE = "/rs/etf/dz1/images/coin_sprite_sheet.png";
+    private static final String COIN_SPRITE_SHEET_FILE = "/images/coin_sprite_sheet.png";
     private static final int SHEET_ROWS = 2;
     private static final int SHEET_COLS = 4;
     private static final int COIN_VALUE = 30;
@@ -43,7 +43,7 @@ public class CoinManager  extends SpriteManager<Coin> {
     @Override
     protected Coin createSprite() {
         if (coinSpriteSheet == null) {
-            System.out.println("Couldn't create a coin, spriteSheet is null");
+            System.err.println("Couldn't create a coin, spriteSheet is null");
             return null;
         }
 

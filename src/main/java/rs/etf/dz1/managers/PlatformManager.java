@@ -43,6 +43,10 @@ public class PlatformManager extends SpriteManager<Platform> {
                     platformBounds.getMinY()
             );
             Enemy spawnedEnemy = enemyManager.spawnSprite(spawnPoint);
+            if (spawnedEnemy == null) {
+                return;
+            }
+
             spawnedEnemy.setPlatform(spawnedPlatform);
         }
     }

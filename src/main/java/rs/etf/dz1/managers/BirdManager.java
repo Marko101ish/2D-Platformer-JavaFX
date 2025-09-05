@@ -5,7 +5,7 @@ import rs.etf.dz1.sprites.Bird;
 import rs.etf.dz1.utils.SpriteSheet;
 
 public class BirdManager  extends SpriteManager<Bird> {
-    private static final String BIRD_SPRITE_SHEET_FILE = "/rs/etf/dz1/images/bird_sprite_sheet.png";
+    private static final String BIRD_SPRITE_SHEET_FILE = "/images/bird_sprite_sheet.png";
     private static final int SHEET_ROWS = 2;
     private static final int SHEET_COLS = 3;
 
@@ -20,7 +20,7 @@ public class BirdManager  extends SpriteManager<Bird> {
     @Override
     protected Bird createSprite() {
         if (birdSpriteSheet == null) {
-            System.out.println("Couldn't create a bird, spriteSheet is null");
+            System.err.println("Couldn't create a bird, spriteSheet is null");
             return null;
         }
 

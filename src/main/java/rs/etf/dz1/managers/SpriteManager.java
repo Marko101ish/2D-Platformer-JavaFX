@@ -42,9 +42,9 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
         if (timeUntilSpawn <= 0) {
             timeUntilSpawn = config.spawnCooldown();
 
-            spawnSprite(getRandomSpawnPoint());
-
-            justSpawned = true;
+            if (spawnSprite(getRandomSpawnPoint()) != null) {
+                justSpawned = true;
+            }
         }
         else {
             justSpawned = false;
@@ -62,6 +62,10 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
 
     public T spawnSprite(Point2D spawnPoint) {
         T newSprite = createSprite();
+        if (newSprite == null) {
+            return null;
+        }
+
         ownedSprites.addLast(newSprite);
         layer.getChildren().add(newSprite);
 

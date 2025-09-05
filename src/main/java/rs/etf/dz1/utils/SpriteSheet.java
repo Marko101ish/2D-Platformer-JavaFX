@@ -14,7 +14,7 @@ public class SpriteSheet {
     public static SpriteSheet createSpriteSheet(String spriteSheetFile, int rows, int cols) {
         URL spriteSheetUrl = Main.class.getResource(spriteSheetFile);
         if (spriteSheetUrl == null) {
-            System.out.println("File not found, couldn't create sprite sheet for " + spriteSheetFile);
+            System.err.println("File not found, couldn't create sprite sheet for " + spriteSheetFile);
             return null;
         }
 
