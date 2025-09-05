@@ -8,15 +8,19 @@ package rs.etf.dz1.main;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import rs.etf.dz1.cameras.Camera;
+import rs.etf.dz1.events.PlayerDiedEvent;
 import rs.etf.dz1.managers.*;
 import rs.etf.dz1.sprites.*;
 import rs.etf.dz1.sprites.characters.Enemy;
 import rs.etf.dz1.sprites.characters.Player;
+import rs.etf.dz1.utils.InvulnerabilityType;
 import rs.etf.dz1.utils.TimeHelper;
 
 /**
@@ -29,7 +33,7 @@ import rs.etf.dz1.utils.TimeHelper;
 // --enable-native-access=javafx.media
 // --sun-misc-unsafe-memory-access=allow
 
-public class Main extends Application {
+public class Main extends Application implements EventHandler<Event> {
 
     public static final int WINDOW_WIDTH = 1280;
     public static final int WINDOW_HEIGHT = 720;
@@ -43,15 +47,20 @@ public class Main extends Application {
     private static final double BIRD_SPAWN_COOLDOWN = 4.0;
     private static final double COIN_SPAWN_COOLDOWN = 15.0;
 
+    private static final int PLAYER_STARTING_LIVES = 3;
+
     public static final String TITLE = "Platformer";
 
     public static final double TIME_TO_LIVE_S = 60.0;
+    public static final double RESPAWN_INVULNERABILITY_DURATION = 1.5;
 
     private static Main instance;
 
     private boolean isPaused = false;
     private double timeMultiplier = 1.0;
+    private int livesLeft = PLAYER_STARTING_LIVES;
 
+    private Scene scene;
     private Group bgLayer;
     private Group floorLayer;
     private Group characterLayer;
@@ -142,8 +151,8 @@ public class Main extends Application {
 
         // calling update once every frame
         new AnimationTimer() {
-            @Override
-            public void handle(long currentNanoTime) {
+                @Override
+                public void handle(long currentNanoTime) {
                 // Delta time is in seconds
                 double deltaNanoTime = (double) (currentNanoTime - lastFrameNanoTime);
                 lastFrameNanoTime = currentNanoTime;
@@ -169,12 +178,10 @@ public class Main extends Application {
             oldTimeLeft = (int) timeLeft;
         }
 
-
-
-        // When there's no time left the game closes automatically
-        if(timeLeft < 0)
+        // When there's no time left trigger game over
+        if (timeLeft < 0)
         {
-            // System.exit(0);
+            gameOver();
         }
 
         player.update(deltaTime);
@@ -190,7 +197,10 @@ public class Main extends Application {
         ui.update(deltaTime);
     }
 
-    void initScene(Stage primaryStage) {
+    private void initScene(Stage primaryStage) {
+        Group root = new Group();
+        scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+
         // Background
         bgLayer = new Group();
 
@@ -213,16 +223,11 @@ public class Main extends Application {
         floor.setTranslateY(WINDOW_HEIGHT);
         floorLayer.getChildren().add(floor);
 
-        player = new Player();
-        player.setTranslateX(100);
-        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - Enemy.ENEMY_HEIGHT / 2.);
-        playerLayer.getChildren().add(player);
-        camera.setTarget(player);
+        spawnPlayer();
 
         this.ui = new UI(WINDOW_WIDTH, WINDOW_HEIGHT, TIME_TO_LIVE_S);
         uiLayer.getChildren().add(ui);
 
-        Group root = new Group();
         // Background
         root.getChildren().add(bgLayer);
         // Middle-ground
@@ -230,16 +235,15 @@ public class Main extends Application {
         // Foreground
         root.getChildren().add(uiLayer);
 
-        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-        scene.setOnKeyPressed(player);
-        scene.setOnKeyReleased(player);
+        root.addEventHandler(PlayerDiedEvent.PLAYER_DIED_EVENT, this);
+
         primaryStage.setTitle(TITLE);
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setResizable(false);
     }
 
-    void initManagers() {
+    private void initManagers() {
         SpawnerConfig platformSpawnerConfig = new SpawnerConfig(
                 WINDOW_WIDTH + 200.0,
                 4 * Enemy.ENEMY_HEIGHT,
@@ -285,11 +289,38 @@ public class Main extends Application {
         soundManager = new SoundManager();
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
+    private void spawnPlayer() {
+        playerLayer.getChildren().clear();
+
+        player = new Player();
+        player.setTranslateX(100);
+        player.setTranslateY(WINDOW_HEIGHT - FLOOR_HEIGHT - Enemy.ENEMY_HEIGHT / 2.);
+
+        playerLayer.getChildren().add(player);
+        camera.setTarget(player);
+
+        scene.setOnKeyPressed(player);
+        scene.setOnKeyReleased(player);
     }
 
+    private void gameOver() {
+        System.exit(0);
+    }
+
+    @Override
+    public void handle(Event event) {
+        if (event instanceof PlayerDiedEvent) {
+            if (--livesLeft > 0) {
+                spawnPlayer();
+
+                player.giveInvulnerability(InvulnerabilityType.RESPAWN, RESPAWN_INVULNERABILITY_DURATION);
+
+                resumeGame();
+            }
+            else {
+                gameOver();
+            }
+
+        }
+    }
 }

@@ -10,6 +10,8 @@ import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
+import rs.etf.dz1.events.PlayerDiedEvent;
+import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.characters.Player;
 
 /**
@@ -21,6 +23,9 @@ public class DeadState extends State {
     public DeadState(Player player) {
         super(player);
         player.setFillColor(Color.PURPLE);
+
+        Main.getInstance().pauseGame();
+
         player.setVelocityX(0);
         player.setVelocityY(0);
 
@@ -47,6 +52,9 @@ public class DeadState extends State {
 
         Timeline animTimeline = new Timeline(kf0, kf1, kf2);
         animTimeline.play();
-        animTimeline.setOnFinished(event -> { System.out.println("RESPAWN OR GAMEOVER"); });
+        animTimeline.setOnFinished(event -> {
+            PlayerDiedEvent playerDiedEvent = new PlayerDiedEvent();
+            player.fireEvent(playerDiedEvent);
+        });
     }
 }

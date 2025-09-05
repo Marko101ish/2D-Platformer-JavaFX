@@ -5,6 +5,9 @@
  */
 package rs.etf.dz1.sprites.characters;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -12,10 +15,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
+import javafx.util.Duration;
+import rs.etf.dz1.events.PlayerDiedEvent;
 import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Floor;
 import rs.etf.dz1.sprites.Platform;
 import rs.etf.dz1.sprites.characters.playerstates.*;
+import rs.etf.dz1.utils.InvulnerabilityType;
 import rs.etf.dz1.utils.collisions.CollisionHelper;
 import rs.etf.dz1.utils.collisions.CollisionResult;
 
@@ -107,6 +113,29 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 
     public boolean isFalling() {
         return falling;
+    }
+
+    @Override
+    public void onInvulnerabilityGained(InvulnerabilityType type) {
+        if (type == InvulnerabilityType.RESPAWN) {
+            KeyValue kv0 = new KeyValue(opacityProperty(), 0);
+            KeyValue kv1 = new KeyValue(opacityProperty(), 1);
+
+            Duration dur0 = Duration.millis(0);
+            Duration dur1 = Duration.millis(500);
+
+            KeyFrame kf0 = new KeyFrame(dur0, kv0);
+            KeyFrame kf1 = new KeyFrame(dur1, kv1);
+
+            Timeline respawnAnimation = new Timeline(kf0, kf1);
+            respawnAnimation.setCycleCount(Timeline.INDEFINITE);
+            setInvulnerabilityAnimation(respawnAnimation);
+        }
+    }
+
+    @Override
+    public void onInvulnerabilityLost(InvulnerabilityType type) {
+        setOpacity(1);
     }
 
     @Override
