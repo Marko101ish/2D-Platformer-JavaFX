@@ -6,7 +6,7 @@ import rs.etf.dz1.sprites.characters.Character;
 import rs.etf.dz1.utils.InvulnerabilityType;
 
 public class ImmunityToken extends Collectible {
-    private final double INVULNERABILITY_DURATION = 5.0;
+    private final double INVULNERABILITY_DURATION = 10.0;
 
     private static final double SPEED = 150.0;
 
