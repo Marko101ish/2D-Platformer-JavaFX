@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import rs.etf.dz1.cameras.Camera;
 import rs.etf.dz1.events.PlayerDiedEvent;
 import rs.etf.dz1.managers.*;
+import rs.etf.dz1.managers.sound.SoundManager;
 import rs.etf.dz1.sprites.*;
 import rs.etf.dz1.sprites.characters.Enemy;
 import rs.etf.dz1.sprites.characters.Player;
@@ -105,8 +106,13 @@ public class Main extends Application implements EventHandler<Event> {
     public EnemyManager getEnemyManager() {
         return enemyManager;
     }
+
     public PlatformManager getPlatformManager() {
         return platformManager;
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 
     public void togglePause() {

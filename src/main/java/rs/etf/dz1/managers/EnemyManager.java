@@ -37,7 +37,7 @@ public class EnemyManager extends SpriteManager<Enemy> {
                     }
                 }
                 else {
-                     // player.takeHit();
+                      player.takeHit();
                 }
             }
         });

@@ -95,6 +95,8 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 
     @Override
     public void die() {
+        Main.getInstance().pauseGame();
+        Main.getInstance().getSoundManager().playPlayerDeathSound();
         state = new DeadState(this);
     }
 

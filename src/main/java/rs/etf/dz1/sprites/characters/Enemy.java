@@ -13,6 +13,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
+import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Platform;
 import rs.etf.dz1.utils.collisions.CollisionHelper;
 
@@ -149,5 +150,10 @@ public class Enemy extends Character {
                 setVelocityX(-getVelocityX() + platform.getVelocityX());
             }
         }
+    }
+
+    @Override
+    public void die() {
+        Main.getInstance().getSoundManager().playEnemyDeathSound();
     }
 }

@@ -8,10 +8,8 @@ package rs.etf.dz1.sprites.characters.playerstates;
 import javafx.animation.*;
 import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import rs.etf.dz1.events.PlayerDiedEvent;
-import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.characters.Player;
 
 /**
@@ -23,8 +21,6 @@ public class DeadState extends State {
     public DeadState(Player player) {
         super(player);
         player.setFillColor(Color.PURPLE);
-
-        Main.getInstance().pauseGame();
 
         player.setVelocityX(0);
         player.setVelocityY(0);
