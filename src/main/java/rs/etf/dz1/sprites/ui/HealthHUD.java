@@ -1,13 +1,13 @@
 package rs.etf.dz1.sprites.ui;
 
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import rs.etf.dz1.main.Main;
+import rs.etf.dz1.sprites.Sprite;
 
 import java.net.URL;
 
-public class HealthHUD extends Group {
+public class HealthHUD extends Sprite {
     private static final String HEART_IMAGE = "/images/heart.png";
     private static final double HEART_OFFSET = 10.0;
     private Image heartImage;
@@ -21,7 +21,7 @@ public class HealthHUD extends Group {
         heartImage = new Image(heartImageUrl.toString());
     }
 
-    public void updateLives(int numOfLives) {
+    public void setLives(int numOfLives) {
         getChildren().clear();
         for (int i = 0; i < numOfLives; i++) {
             ImageView heart = new ImageView(heartImage);

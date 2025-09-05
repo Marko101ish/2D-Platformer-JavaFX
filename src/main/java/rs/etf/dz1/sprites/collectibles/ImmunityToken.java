@@ -2,7 +2,6 @@ package rs.etf.dz1.sprites.collectibles;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
-import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.characters.Character;
 import rs.etf.dz1.utils.InvulnerabilityType;
 
@@ -23,7 +22,6 @@ public class ImmunityToken extends Collectible {
 
     @Override
     protected void onCollected(Character character) {
-        Main.getInstance().getSoundManager().playImmunityTokenCollectedSound();
         character.giveInvulnerability(InvulnerabilityType.IMMUNITY_COIN, INVULNERABILITY_DURATION);
     }
 }

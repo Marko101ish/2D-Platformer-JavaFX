@@ -8,6 +8,7 @@ import rs.etf.dz1.utils.TimeHelper;
 
 public abstract class Character extends Sprite {
     private int health = 1;
+    private double invulnerabilityDuration = 0;
     private double invulnerabilityTimeLeft = 0;
     private InvulnerabilityType invulnerabilityType = InvulnerabilityType.NONE;
     private Animation invulnerabilityAnimation;
@@ -75,7 +76,7 @@ public abstract class Character extends Sprite {
         }
     }
 
-    protected void onInvulnerabilityGained(InvulnerabilityType type) {
+    protected void onInvulnerabilityGained(InvulnerabilityType type, double duration) {
     }
 
     protected void onInvulnerabilityLost(InvulnerabilityType type) {
@@ -90,10 +91,11 @@ public abstract class Character extends Sprite {
     }
 
     private void invulnerabilityGainedInternal(InvulnerabilityType type, double duration) {
+        invulnerabilityDuration = duration;
         invulnerabilityTimeLeft = duration;
         invulnerabilityType = type;
 
-        onInvulnerabilityGained(invulnerabilityType);
+        onInvulnerabilityGained(invulnerabilityType, duration);
 
         if (invulnerabilityVisual != null) {
             getChildren().add(invulnerabilityVisual);
@@ -115,6 +117,7 @@ public abstract class Character extends Sprite {
 
         invulnerabilityType = InvulnerabilityType.NONE;
         invulnerabilityTimeLeft = 0;
+        invulnerabilityDuration = 0;
         invulnerabilityAnimation = null;
     }
 }

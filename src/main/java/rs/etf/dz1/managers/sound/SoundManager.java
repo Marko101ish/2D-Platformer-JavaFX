@@ -11,7 +11,8 @@ public class SoundManager {
     private MediaPlayer playerDeathSound;
     private MediaPlayer enemyDeathSound;
     private MediaPlayer coinCollectedSound;
-    private MediaPlayer immunityTokenCollectedSound;
+    private MediaPlayer immunityGainedSound;
+    private MediaPlayer immunityLostSound;
     private float[] channels;
 
     public SoundManager() {
@@ -23,15 +24,20 @@ public class SoundManager {
         playerDeathSound = createPlayer("/sounds/player_death.mp3", SoundChannel.SFX, false, false);
         enemyDeathSound = createPlayer("/sounds/enemy_death.mp3", SoundChannel.SFX, false, false);
         coinCollectedSound = createPlayer("/sounds/coin_collected.mp3", SoundChannel.SFX, false, false);
-        immunityTokenCollectedSound = createPlayer("/sounds/immunity_token_collected.mp3", SoundChannel.SFX, false, false);
+        immunityGainedSound = createPlayer("/sounds/immunity_gained.mp3", SoundChannel.SFX, false, false);
+        immunityLostSound = createPlayer("/sounds/immunity_lost.mp3", SoundChannel.SFX, false, false);
     }
 
     public void playCoinCollectedSound() {
         playSound(coinCollectedSound);
     }
 
-    public void playImmunityTokenCollectedSound() {
-        playSound(immunityTokenCollectedSound);
+    public void playImmunityGainedSound() {
+        playSound(immunityGainedSound);
+    }
+
+    public void playImmunityLostSound() {
+        playSound(immunityLostSound);
     }
 
     public void playPlayerDeathSound() {

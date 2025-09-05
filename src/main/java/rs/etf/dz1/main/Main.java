@@ -115,6 +115,10 @@ public class Main extends Application implements EventHandler<Event> {
         return soundManager;
     }
 
+    public UI getUI() {
+        return ui;
+    }
+
     public void togglePause() {
         if (isPaused) {
             resumeGame();

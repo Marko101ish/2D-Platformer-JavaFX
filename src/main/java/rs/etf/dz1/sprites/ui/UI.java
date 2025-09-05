@@ -20,14 +20,16 @@ import java.time.Duration;
 public class UI extends Sprite {
     private static final double MAX_FONT_SIZE = 20.0;
     private static final double TOP_MARGIN = 20.0;
+    private static final double IMMUNITY_HUD_OFFSET_X = 80.0;
+    private static final double IMMUNITY_HUD_OFFSET_Y = 150.0;
     private int timeLeft = 0;
     private int score = 0;
-    private int numOfLives = 0;
 
     private final Label gameTimeLabel;
     private final Label scoreLabel;
     private final Label fpsLabel;
     private HealthHUD healthHUD;
+    private ImmunityHUD immunityHUD;
 
     public UI(int width, int height, double timeToLive) {
         Font uiFont = new Font(MAX_FONT_SIZE);
@@ -54,9 +56,14 @@ public class UI extends Sprite {
         healthHUD.setTranslateX(width);
         healthHUD.setTranslateY(TOP_MARGIN);
 
+        immunityHUD = new ImmunityHUD();
+        immunityHUD.setTranslateX(width - IMMUNITY_HUD_OFFSET_X);
+        immunityHUD.setTranslateY(IMMUNITY_HUD_OFFSET_Y);
+
         getChildren().add(gameTimeLabel);
         getChildren().add(scoreLabel);
         getChildren().add(healthHUD);
+        getChildren().add(immunityHUD);
         // getChildren().add(fpsLabel);
     }
 
@@ -70,14 +77,23 @@ public class UI extends Sprite {
     }
 
     public void setNumOfLives(int lives) {
-        this.numOfLives = lives;
+        healthHUD.setLives(lives);
+    }
+
+    public void startImmunity(double duration) {
+        immunityHUD.startImmunity(duration);
+    }
+
+    public void stopImmunity() {
+        immunityHUD.stopImmunity();
     }
 
     @Override
     public void update() {
         updateTimeLeft();
         updateScore();
-        healthHUD.updateLives(numOfLives);
+        healthHUD.update();
+        immunityHUD.update();
 
         final double deltaTime = TimeHelper.getDeltaTime();
         fpsLabel.setText("FPS: " + 1./deltaTime);

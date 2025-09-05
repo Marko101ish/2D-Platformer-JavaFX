@@ -117,7 +117,7 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     }
 
     @Override
-    public void onInvulnerabilityGained(InvulnerabilityType type) {
+    public void onInvulnerabilityGained(InvulnerabilityType type, double duration) {
         if (type == InvulnerabilityType.RESPAWN) {
             KeyValue kv0 = new KeyValue(opacityProperty(), 0);
             KeyValue kv1 = new KeyValue(opacityProperty(), 1);
@@ -151,12 +151,21 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 
             setInvulnerabilityVisual(invulnerabilityCircle);
             setInvulnerabilityAnimation(immunityAnimation);
+
+            Main.getInstance().getSoundManager().playImmunityGainedSound();
+            Main.getInstance().getUI().startImmunity(duration);
         }
     }
 
     @Override
     public void onInvulnerabilityLost(InvulnerabilityType type) {
-        setOpacity(1);
+        if (type == InvulnerabilityType.RESPAWN) {
+            setOpacity(1);
+        }
+        else if (type == InvulnerabilityType.IMMUNITY_COIN) {
+            Main.getInstance().getSoundManager().playImmunityLostSound();
+            Main.getInstance().getUI().stopImmunity();
+        }
     }
 
     @Override
