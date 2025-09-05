@@ -56,6 +56,7 @@ public class Coin extends Collectible {
     }
 
     protected void onCollected(Character character) {
+        Main.getInstance().getSoundManager().playCoinCollectedSound();
         Main.getInstance().addPoints(coinValue);
     }
 }

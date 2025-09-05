@@ -10,6 +10,8 @@ public class SoundManager {
     private MediaPlayer backgroundMusic;
     private MediaPlayer playerDeathSound;
     private MediaPlayer enemyDeathSound;
+    private MediaPlayer coinCollectedSound;
+    private MediaPlayer immunityTokenCollectedSound;
     private float[] channels;
 
     public SoundManager() {
@@ -20,20 +22,24 @@ public class SoundManager {
         backgroundMusic = createPlayer("/sounds/background.mp3", SoundChannel.MUSIC, true, true);
         playerDeathSound = createPlayer("/sounds/player_death.mp3", SoundChannel.SFX, false, false);
         enemyDeathSound = createPlayer("/sounds/enemy_death.mp3", SoundChannel.SFX, false, false);
+        coinCollectedSound = createPlayer("/sounds/coin_collected.mp3", SoundChannel.SFX, false, false);
+        immunityTokenCollectedSound = createPlayer("/sounds/immunity_token_collected.mp3", SoundChannel.SFX, false, false);
+    }
+
+    public void playCoinCollectedSound() {
+        playSound(coinCollectedSound);
+    }
+
+    public void playImmunityTokenCollectedSound() {
+        playSound(immunityTokenCollectedSound);
     }
 
     public void playPlayerDeathSound() {
-        if (playerDeathSound != null) {
-            playerDeathSound.stop();
-            playerDeathSound.play();
-        }
+        playSound(playerDeathSound);
     }
 
     public void playEnemyDeathSound() {
-        if (enemyDeathSound != null) {
-            enemyDeathSound.stop();
-            enemyDeathSound.play();
-        }
+        playSound(enemyDeathSound);
     }
 
     private MediaPlayer createPlayer(String musicFile, SoundChannel channel, boolean loop, boolean isAutoPlay) {
@@ -53,5 +59,17 @@ public class SoundManager {
         }
 
         return player;
+    }
+
+    private void playSound(MediaPlayer player) {
+        if (player == null) {
+            return;
+        }
+
+        if (player.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+            player.stop();
+        }
+
+        player.play();
     }
 }
