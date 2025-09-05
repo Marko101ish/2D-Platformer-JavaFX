@@ -142,8 +142,8 @@ public class Enemy extends Character {
     }
 
     @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
+    public void update() {
+        super.update();
         if (platform != null) {
             if(!CollisionHelper.containsX(platform, this)) {
                 setVelocityX(-getVelocityX() + platform.getVelocityX());

@@ -7,6 +7,7 @@ package rs.etf.dz1.sprites;
 
 import javafx.scene.Group;
 import rs.etf.dz1.utils.IUpdatable;
+import rs.etf.dz1.utils.TimeHelper;
 
 /**
  *
@@ -82,7 +83,8 @@ public abstract class Sprite extends Group implements IUpdatable {
     }
 
     // method should be redefined and called in Main.update() method to update the object status
-    public void update(double deltaTime) {
+    public void update() {
+        final double deltaTime = TimeHelper.getDeltaTime();
         setTranslateX(getTranslateX() + getVelocityX() * deltaTime);
         setTranslateY(getTranslateY() + getVelocityY() * deltaTime);
     }

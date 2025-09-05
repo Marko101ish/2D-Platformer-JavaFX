@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.scene.Node;
 import rs.etf.dz1.sprites.Sprite;
 import rs.etf.dz1.utils.InvulnerabilityType;
+import rs.etf.dz1.utils.TimeHelper;
 
 public abstract class Character extends Sprite {
     private int health = 1;
@@ -64,8 +65,10 @@ public abstract class Character extends Sprite {
     }
 
     @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
+    public void update() {
+        super.update();
+        final double deltaTime = TimeHelper.getDeltaTime();
+
         invulnerabilityTimeLeft -= deltaTime;
         if (invulnerabilityTimeLeft <= 0) {
             invulnerabilityLostInternal();

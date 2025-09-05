@@ -5,5 +5,5 @@ public interface IUpdatable {
     //
     // when moving objects make sure to take deltaTime into account
     // so the simulation runs smoothly even with inconsistent frame rate
-    void update(double deltaTime);
+    void update();
 }

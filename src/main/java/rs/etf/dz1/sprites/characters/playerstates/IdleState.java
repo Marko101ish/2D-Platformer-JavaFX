@@ -44,7 +44,7 @@ public class IdleState extends State {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update() {
         if (!player.isOnGround()) {
             player.fall();
         }

@@ -15,8 +15,8 @@ public class EnemyManager extends SpriteManager<Enemy> {
     }
 
     @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
+    public void update() {
+        super.update();
 
         Player player = Main.getInstance().getPlayer();
         if (!player.isAlive()) {

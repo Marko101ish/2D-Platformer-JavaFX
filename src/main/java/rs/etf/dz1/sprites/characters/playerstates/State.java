@@ -41,6 +41,6 @@ public abstract class State implements IUpdatable {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update() {
     }
 }

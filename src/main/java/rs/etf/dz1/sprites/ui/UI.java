@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import rs.etf.dz1.sprites.Sprite;
+import rs.etf.dz1.utils.TimeHelper;
 
 import java.time.Duration;
 
@@ -73,10 +74,12 @@ public class UI extends Sprite {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update() {
         updateTimeLeft();
         updateScore();
         healthHUD.updateLives(numOfLives);
+
+        final double deltaTime = TimeHelper.getDeltaTime();
         fpsLabel.setText("FPS: " + 1./deltaTime);
     }
 

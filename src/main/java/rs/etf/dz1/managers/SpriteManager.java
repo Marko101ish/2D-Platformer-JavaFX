@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import rs.etf.dz1.sprites.Sprite;
 import rs.etf.dz1.utils.IUpdatable;
+import rs.etf.dz1.utils.TimeHelper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -38,7 +39,9 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update() {
+        final double deltaTime = TimeHelper.getDeltaTime();
+
         if (timeUntilSpawn <= 0) {
             timeUntilSpawn = config.spawnCooldown();
 
@@ -57,7 +60,7 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
         layer.getChildren().removeAll(readyForRemoval);
         ownedSprites.removeAll(readyForRemoval);
 
-        ownedSprites.forEach(e -> e.update(deltaTime));
+        ownedSprites.forEach(Sprite::update);
     }
 
     public T spawnSprite(Point2D spawnPoint) {

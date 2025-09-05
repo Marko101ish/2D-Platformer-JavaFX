@@ -7,6 +7,7 @@ package rs.etf.dz1.sprites.characters.playerstates;
 
 import javafx.scene.paint.Color;
 import rs.etf.dz1.sprites.characters.Player;
+import rs.etf.dz1.utils.TimeHelper;
 
 /**
  *
@@ -56,8 +57,9 @@ public class JumpState extends State {
     }
 
     @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
+    public void update() {
+        super.update();
+        final double deltaTime = TimeHelper.getDeltaTime();
 
         double newVelocityY = player.getVelocityY() - GRAVITY_ACCELERATION;
         player.setVelocityY(newVelocityY);

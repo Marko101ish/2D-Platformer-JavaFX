@@ -164,14 +164,15 @@ public class Main extends Application implements EventHandler<Event> {
                 deltaTime *= timeMultiplier;
 
                 TimeHelper.setDeltaTime(deltaTime);
-                update(deltaTime);
+                update();
             }
         }.start();
     }
 
     // called once per frame to update game state
     // deltaTime is in milliseconds here
-    private void update(double deltaTime) {
+    private void update() {
+        final double deltaTime = TimeHelper.getDeltaTime();
         timeLeft = timeLeft - deltaTime;
         final int secondsPassed = oldTimeLeft - (int)timeLeft;
         if (secondsPassed > 0) {
@@ -185,18 +186,18 @@ public class Main extends Application implements EventHandler<Event> {
             gameOver();
         }
 
-        player.update(deltaTime);
-        platformManager.update(deltaTime);
-        enemyManager.update(deltaTime);
-        cloudManager.update(deltaTime);
-        birdManager.update(deltaTime);
-        collectibleManager.update(deltaTime);
-        camera.update(deltaTime);
+        player.update();
+        platformManager.update();
+        enemyManager.update();
+        cloudManager.update();
+        birdManager.update();
+        collectibleManager.update();
+        camera.update();
 
         ui.setTimeLeft((int) timeLeft);
         ui.setScore(score);
         ui.setNumOfLives(livesLeft);
-        ui.update(deltaTime);
+        ui.update();
     }
 
     private void initScene(Stage primaryStage) {

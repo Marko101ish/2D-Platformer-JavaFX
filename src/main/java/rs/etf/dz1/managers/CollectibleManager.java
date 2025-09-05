@@ -27,8 +27,8 @@ public class CollectibleManager extends SpriteManager<Collectible> {
     }
 
     @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
+    public void update() {
+        super.update();
 
         Player player = Main.getInstance().getPlayer();
         if (!player.isAlive()) {

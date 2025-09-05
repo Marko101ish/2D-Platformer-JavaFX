@@ -3,7 +3,7 @@ package rs.etf.dz1.utils;
 public class TimeHelper {
     private static double deltaTime;
 
-    public static double getDeltaTime() {
+    public static final double getDeltaTime() {
         return deltaTime;
     }
 

@@ -22,8 +22,8 @@ public class PlatformManager extends SpriteManager<Platform> {
     }
 
     @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
+    public void update() {
+        super.update();
 
         if (!justSpawned) {
             return;

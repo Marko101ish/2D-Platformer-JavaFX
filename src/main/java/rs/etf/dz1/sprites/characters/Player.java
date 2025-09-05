@@ -158,9 +158,9 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     }
 
     @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
-        state.update(deltaTime);
+    public void update() {
+        super.update();
+        state.update();
 
         Floor floor = Main.getInstance().getFloor();
 

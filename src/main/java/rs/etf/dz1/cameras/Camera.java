@@ -45,7 +45,7 @@ public class Camera extends Group {
         followTranslation.setY(0.0);
     }
 
-    public void update(double deltaTime) {
+    public void update() {
         if (followTarget == null) {
             return;
         }
