@@ -39,13 +39,15 @@ public class Main extends Application implements EventHandler<Event> {
 
     public static final int WINDOW_WIDTH = 1280;
     public static final int WINDOW_HEIGHT = 720;
+    // All objects in the foreground (except the player) move at the same speed
+    public static final double OBJECT_SPEED = 300.0;
 
     public static final int FLOOR_WIDTH = WINDOW_WIDTH;
     public static final int FLOOR_HEIGHT = 50;
     public static final int FLOOR_ROWS = 8;
 
-    private static final double PLATFORM_SPAWN_COOLDOWN = 6.0;
-    private static final double ENEMY_SPAWN_COOLDOWN = 2.5;
+    private static final double PLATFORM_SPAWN_COOLDOWN = 3.2;
+    private static final double ENEMY_SPAWN_COOLDOWN = 2.2;
     private static final double CLOUD_SPAWN_COOLDOWN = 1.5;
     private static final double BIRD_SPAWN_COOLDOWN = 4.0;
     private static final double COLLECTIBLE_SPAWN_COOLDOWN = 10.0;
@@ -303,7 +305,7 @@ public class Main extends Application implements EventHandler<Event> {
     }
 
     private void spawnPlayer() {
-        playerLayer.getChildren().clear();
+        playerLayer.getChildren().remove(player);
 
         player = new Player();
         player.setTranslateX(100);

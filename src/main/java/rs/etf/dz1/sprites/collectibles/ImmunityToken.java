@@ -2,17 +2,16 @@ package rs.etf.dz1.sprites.collectibles;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.characters.Character;
 import rs.etf.dz1.utils.InvulnerabilityType;
 
 public class ImmunityToken extends Collectible {
     private final double INVULNERABILITY_DURATION = 10.0;
 
-    private static final double SPEED = 150.0;
-
     public ImmunityToken() {
         super();
-        velocityX = -SPEED;
+        velocityX = -Main.OBJECT_SPEED;
 
         Ellipse ellipse = new Ellipse(0, 0, 20, 40);
         ellipse.setFill(Color.PURPLE);

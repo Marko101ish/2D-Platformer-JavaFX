@@ -10,8 +10,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
-import rs.etf.dz1.managers.BirdManager;
-import rs.etf.dz1.managers.CloudManager;
 
 /**
  *

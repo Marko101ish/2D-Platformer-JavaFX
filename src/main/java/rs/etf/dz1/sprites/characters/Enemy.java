@@ -25,12 +25,10 @@ public class Enemy extends Character {
     public static final int ENEMY_WIDTH = 100;
     public static final int ENEMY_HEIGHT = 80;
 
-    private static final double SPEED = 350.0;
-
     private Platform platform = null;
 
     public Enemy() {
-        velocityX = -SPEED;
+        velocityX = -Main.OBJECT_SPEED;
 
         Polygon head = new Polygon();
 

@@ -22,21 +22,20 @@ public class PlatformManager extends SpriteManager<Platform> {
     }
 
     @Override
-    public void update() {
-        super.update();
+    protected Platform createSprite() {
+        double width = randomizer.nextDouble() * (MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
+        return new Platform(width, HEIGHT);
+    }
 
-        if (!justSpawned) {
-            return;
-        }
-
+    @Override
+    protected void onSpriteSpawned(Platform spawnedSprite) {
         EnemyManager enemyManager = Main.getInstance().getEnemyManager();
         if (enemyManager == null) {
             return;
         }
 
         if (randomizer.nextDouble() < ENEMY_PROBABILITY) {
-            Platform spawnedPlatform = ownedSprites.getLast();
-            Bounds platformBounds = spawnedPlatform.getBoundsInParent();
+            Bounds platformBounds = spawnedSprite.getBoundsInParent();
 
             Point2D spawnPoint = new Point2D(
                     platformBounds.getMaxX(),
@@ -47,13 +46,7 @@ public class PlatformManager extends SpriteManager<Platform> {
                 return;
             }
 
-            spawnedEnemy.setPlatform(spawnedPlatform);
+            spawnedEnemy.setPlatform(spawnedSprite);
         }
-    }
-
-    @Override
-    protected Platform createSprite() {
-        double width = randomizer.nextDouble() * (MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
-        return new Platform(width, HEIGHT);
     }
 }

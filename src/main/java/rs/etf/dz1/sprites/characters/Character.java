@@ -10,7 +10,7 @@ public abstract class Character extends Sprite {
     private int health = 1;
     private double invulnerabilityDuration = 0;
     private double invulnerabilityTimeLeft = 0;
-    private InvulnerabilityType invulnerabilityType = InvulnerabilityType.NONE;
+    private InvulnerabilityType activeInvulnerability = InvulnerabilityType.NONE;
     private Animation invulnerabilityAnimation;
     private Node invulnerabilityVisual;
 
@@ -39,11 +39,11 @@ public abstract class Character extends Sprite {
     }
 
     public boolean isInvulnerable() {
-        return invulnerabilityType != InvulnerabilityType.NONE;
+        return activeInvulnerability != InvulnerabilityType.NONE;
     }
 
     public boolean isImmune() {
-        return invulnerabilityType == InvulnerabilityType.IMMUNITY_COIN;
+        return activeInvulnerability == InvulnerabilityType.IMMUNITY_COIN;
     }
 
     public void giveInvulnerability(InvulnerabilityType type, double duration) {
@@ -53,9 +53,9 @@ public abstract class Character extends Sprite {
         }
 
         // Is already invulnerable
-        if (invulnerabilityType != InvulnerabilityType.NONE) {
+        if (isInvulnerable()) {
             // Override previous invulnerability
-            onInvulnerabilityLost(invulnerabilityType);
+            invulnerabilityLostInternal();
         }
 
         invulnerabilityGainedInternal(type, duration);
@@ -93,9 +93,9 @@ public abstract class Character extends Sprite {
     private void invulnerabilityGainedInternal(InvulnerabilityType type, double duration) {
         invulnerabilityDuration = duration;
         invulnerabilityTimeLeft = duration;
-        invulnerabilityType = type;
+        activeInvulnerability = type;
 
-        onInvulnerabilityGained(invulnerabilityType, duration);
+        onInvulnerabilityGained(activeInvulnerability, duration);
 
         if (invulnerabilityVisual != null) {
             getChildren().add(invulnerabilityVisual);
@@ -113,9 +113,9 @@ public abstract class Character extends Sprite {
             getChildren().remove(invulnerabilityVisual);
         }
 
-        onInvulnerabilityLost(invulnerabilityType);
+        onInvulnerabilityLost(activeInvulnerability);
 
-        invulnerabilityType = InvulnerabilityType.NONE;
+        activeInvulnerability = InvulnerabilityType.NONE;
         invulnerabilityTimeLeft = 0;
         invulnerabilityDuration = 0;
         invulnerabilityAnimation = null;

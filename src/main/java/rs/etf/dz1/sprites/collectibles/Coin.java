@@ -27,11 +27,10 @@ public class Coin extends Collectible {
     private final static double IMAGE_SCALE = 0.25;
     private final static double GROUND_OFFSET = 250.0;
 
-    private static final double SPEED = 150.0;
     private final int coinValue;
 
     public Coin(SpriteSheet spriteSheet, int coinValue) {
-        velocityX = -SPEED;
+        velocityX = -Main.OBJECT_SPEED;
         this.coinValue = coinValue;
 
         Rectangle2D[] spriteFrames = spriteSheet.getFrames();

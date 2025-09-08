@@ -15,16 +15,13 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
     protected List<T> ownedSprites = new LinkedList<T>();
     protected List<T> readyForRemoval = new LinkedList<T>();
 
-    // This will be true for the duration of the frame
-    // when a new Sprite has been spawned
-    protected boolean justSpawned = false;
     protected final Random randomizer;
 
     private final SpawnerConfig config;
-    private double timeUntilSpawn;
-
     // Layer used for displaying ownedSprites
-    private Group layer;
+    private final Group layer;
+
+    private double timeUntilSpawn;
 
     public SpriteManager(SpawnerConfig config, Group layer) {
         this.config = config;
@@ -45,12 +42,10 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
         if (timeUntilSpawn <= 0) {
             timeUntilSpawn = config.spawnCooldown();
 
-            if (spawnSprite(getRandomSpawnPoint()) != null) {
-                justSpawned = true;
+            T spawnedSprite = spawnSprite(getRandomSpawnPoint());
+            if (spawnedSprite != null) {
+                onSpriteSpawned(spawnedSprite);
             }
-        }
-        else {
-            justSpawned = false;
         }
 
         timeUntilSpawn -= deltaTime;
@@ -83,6 +78,10 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
     }
 
     protected abstract T createSprite();
+
+    protected void onSpriteSpawned(T spawnedSprite) {
+
+    }
 
     private Point2D getRandomSpawnPoint()
     {
