@@ -5,7 +5,6 @@
  */
 package rs.etf.dz1.cameras;
 
-import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.transform.Translate;
@@ -60,6 +59,13 @@ public class Camera extends Group {
             double translationY = centerY - followTarget.getTranslateY();
             followTranslation.setX(translationX);
             followTranslation.setY(translationY);
+
+            followTranslation.setX(Math.clamp(followTranslation.getX(), -(Main.PLAYABLE_AREA_MAX_X - width), -Main.PLAYABLE_AREA_MIN_X));
+        }
+        else {
+            // Just making sure the target is always in view
+            double translationX = centerX - followTarget.getTranslateX();
+            followTranslation.setX(translationX);
 
             followTranslation.setX(Math.clamp(followTranslation.getX(), -(Main.PLAYABLE_AREA_MAX_X - width), -Main.PLAYABLE_AREA_MIN_X));
         }
