@@ -9,21 +9,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
 
-import java.util.Random;
-
 /**
  *
  * @author om180345d
  */
 public class FloorBlock extends Sprite {
 
-    public FloorBlock(boolean isOnSurface) {
-        Rectangle background = new Rectangle(-0.5, -0.5, 1, 1);
+    public FloorBlock(double height) {
+        Rectangle background = new Rectangle(-0.5, -0.5, 1, height);
         background.setFill(Color.SIENNA);
         getChildren().add(background);
-        if (!isOnSurface) {
-            return;
-        }
 
         Polygon foreground = new Polygon();
         // Grass polygon

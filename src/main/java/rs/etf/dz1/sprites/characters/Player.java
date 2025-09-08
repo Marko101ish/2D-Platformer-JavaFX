@@ -175,8 +175,8 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 
         Floor floor = Main.getInstance().getFloor();
 
-        CollisionResult collisionWithFloor = CollisionHelper.checkCollision(this, floor);
-        onGround = collisionWithFloor.inCollision && collisionWithFloor.isAbove();
+        CollisionResult groundCollision = floor.checkForGround(this);
+        onGround = groundCollision != null && groundCollision.isAbove();
 
 //        onPlatform = false;
 //        for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
