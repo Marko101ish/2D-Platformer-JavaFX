@@ -202,8 +202,10 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 //        }
 
         // Player stays inside the window
-        setTranslateX(Math.clamp(getTranslateX(), 0.0, 1280));
-        setTranslateY(Math.clamp(getTranslateY(), 0.0, 720));
+        setTranslateX(Math.clamp(getTranslateX(), Main.PLAYABLE_AREA_MIN_X, Main.PLAYABLE_AREA_MAX_X));
+        if (getTranslateY() > Main.WINDOW_HEIGHT + Main.FALL_DEATH_OFFSET) {
+            die();
+        }
     }
 
     // executed on keyboard input to perform particular actions

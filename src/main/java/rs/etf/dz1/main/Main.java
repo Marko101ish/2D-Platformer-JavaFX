@@ -39,10 +39,15 @@ public class Main extends Application implements EventHandler<Event> {
 
     public static final int WINDOW_WIDTH = 1280;
     public static final int WINDOW_HEIGHT = 720;
+
+    public static final double PLAYABLE_AREA_MIN_X = 0.0;
+    public static final double PLAYABLE_AREA_MAX_X = 2 * Main.WINDOW_WIDTH;
+
+    // How far can a player fall before they die
+    public static final int FALL_DEATH_OFFSET = 100;
     // All objects in the foreground (except the player) move at the same speed
     public static final double OBJECT_SPEED = 300.0;
 
-    public static final int FLOOR_WIDTH = WINDOW_WIDTH;
     public static final int FLOOR_HEIGHT = 50;
     public static final int FLOOR_ROWS = 8;
 
@@ -234,7 +239,7 @@ public class Main extends Application implements EventHandler<Event> {
         SkyBox skyBox = new SkyBox(WINDOW_WIDTH, WINDOW_HEIGHT);
         bgLayer.getChildren().add(skyBox);
 
-        floor = new Floor(FLOOR_WIDTH, FLOOR_HEIGHT, FLOOR_ROWS);
+        floor = new Floor((int) PLAYABLE_AREA_MIN_X, (int) PLAYABLE_AREA_MAX_X, FLOOR_HEIGHT, FLOOR_ROWS);
         floor.setTranslateY(WINDOW_HEIGHT);
         floorLayer.getChildren().add(floor);
 
@@ -260,7 +265,6 @@ public class Main extends Application implements EventHandler<Event> {
 
     private void initManagers() {
         SpawnerConfig platformSpawnerConfig = new SpawnerConfig(
-                WINDOW_WIDTH + 200.0,
                 4 * Enemy.ENEMY_HEIGHT,
                 WINDOW_HEIGHT - (FLOOR_HEIGHT + 1.5 * Enemy.ENEMY_HEIGHT),
                 PLATFORM_SPAWN_COOLDOWN
@@ -268,7 +272,6 @@ public class Main extends Application implements EventHandler<Event> {
         platformManager = new PlatformManager(platformSpawnerConfig, floorLayer);
 
         SpawnerConfig enemySpawnerconfig = new SpawnerConfig(
-                WINDOW_WIDTH + Enemy.ENEMY_WIDTH,
                 WINDOW_HEIGHT - FLOOR_HEIGHT,
                 WINDOW_HEIGHT - FLOOR_HEIGHT,
                 ENEMY_SPAWN_COOLDOWN
@@ -276,7 +279,6 @@ public class Main extends Application implements EventHandler<Event> {
         enemyManager = new EnemyManager(enemySpawnerconfig, characterLayer);
 
         SpawnerConfig cloudSpawnConfig = new SpawnerConfig(
-                WINDOW_WIDTH + 200.0,
                 0.0,
                 WINDOW_HEIGHT * 0.5,
                 CLOUD_SPAWN_COOLDOWN
@@ -284,7 +286,6 @@ public class Main extends Application implements EventHandler<Event> {
         cloudManager = new CloudManager(cloudSpawnConfig, bgLayer);
 
         SpawnerConfig birdSpawnConfig = new SpawnerConfig(
-                WINDOW_WIDTH + 200.0,
                 0.0,
                 WINDOW_HEIGHT * 0.33,
                 BIRD_SPAWN_COOLDOWN
@@ -292,7 +293,6 @@ public class Main extends Application implements EventHandler<Event> {
         birdManager = new BirdManager(birdSpawnConfig, bgLayer);
 
         SpawnerConfig collectibleSpawnerconfig = new SpawnerConfig(
-                WINDOW_WIDTH + Enemy.ENEMY_WIDTH,
                 WINDOW_HEIGHT - FLOOR_HEIGHT - Enemy.ENEMY_HEIGHT * 0.2,
                 WINDOW_HEIGHT - FLOOR_HEIGHT - Enemy.ENEMY_HEIGHT * 0.2,
                 COLLECTIBLE_SPAWN_COOLDOWN,

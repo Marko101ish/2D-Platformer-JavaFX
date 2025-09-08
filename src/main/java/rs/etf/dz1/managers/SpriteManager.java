@@ -3,6 +3,7 @@ package rs.etf.dz1.managers;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Sprite;
 import rs.etf.dz1.utils.IUpdatable;
 import rs.etf.dz1.utils.TimeHelper;
@@ -17,6 +18,8 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
 
     protected final Random randomizer;
 
+    private static final double SPAWN_POINT_X = Main.PLAYABLE_AREA_MAX_X + 450.0;
+    private static final double DESPAWN_POINT_X = Main.PLAYABLE_AREA_MIN_X - 0.0;
     private final SpawnerConfig config;
     // Layer used for displaying ownedSprites
     private final Group layer;
@@ -86,13 +89,13 @@ public abstract class SpriteManager<T extends Sprite> implements IUpdatable {
     private Point2D getRandomSpawnPoint()
     {
         double randomHeight = randomizer.nextDouble() * (config.maxSpawnY() - config.minSpawnY()) +  config.minSpawnY();
-        return new Point2D(config.spawnX(), randomHeight);
+        return new Point2D(SPAWN_POINT_X, randomHeight);
     }
 
     private void removeOutOfBoundsSprites() {
         for (T sprite : ownedSprites) {
             Bounds bounds = sprite.getBoundsInParent();
-            if (bounds.getMaxX() < 0) {
+            if (bounds.getMaxX() < DESPAWN_POINT_X) {
                 readyForRemoval.add(sprite);
             }
         }

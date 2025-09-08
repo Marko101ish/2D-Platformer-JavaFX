@@ -14,15 +14,14 @@ import javafx.scene.transform.Translate;
  */
 public class Floor extends Sprite {
 
-    public Floor(int floorWidth, int floorHeight, int numRows) {
-        final int blockSize = floorHeight;
+    public Floor(int floorStart, int floorEnd, int blockSize, int numRows) {
         Scale scale = new Scale(blockSize, blockSize);// floorBlocks should be square and side equals to the height of the floor
-        Translate translate = new Translate(0, -floorHeight / 2.);
+        Translate translate = new Translate(0, -blockSize / 2.);
         // floor is made up of a number of floorBlocks the following loop only concatenates a big number of blocks to make up a floor
 
         for (int rowIndex = 0; rowIndex < numRows; ++rowIndex) {
-            int i = -4 * floorWidth;
-            while (i < 5 * floorWidth + blockSize) {
+            int i = floorStart;
+            while (i < floorEnd) {
                 FloorBlock floorBlock = new FloorBlock(rowIndex == 0);
                 floorBlock.getTransforms().add(new Translate(i, rowIndex * blockSize));
                 floorBlock.getTransforms().add(translate);
@@ -31,5 +30,12 @@ public class Floor extends Sprite {
                 i += blockSize;
             }
         }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+
     }
 }
