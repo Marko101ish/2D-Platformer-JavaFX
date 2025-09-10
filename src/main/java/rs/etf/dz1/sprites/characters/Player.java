@@ -189,7 +189,12 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         // Player stays inside the window
         setTranslateX(Math.clamp(getTranslateX(), Main.PLAYABLE_AREA_MIN_X, Main.PLAYABLE_AREA_MAX_X));
         if (getTranslateY() > Main.WINDOW_HEIGHT + Main.FALL_DEATH_OFFSET) {
-            die();
+            if (justRespawned()) {
+                jump();
+            }
+            else {
+                die();
+            }
         }
     }
 

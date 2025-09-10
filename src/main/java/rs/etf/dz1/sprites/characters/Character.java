@@ -46,6 +46,10 @@ public abstract class Character extends Sprite {
         return activeInvulnerability == InvulnerabilityType.IMMUNITY_COIN;
     }
 
+    public boolean justRespawned() {
+        return activeInvulnerability == InvulnerabilityType.RESPAWN;
+    }
+
     public void giveInvulnerability(InvulnerabilityType type, double duration) {
         if (type == InvulnerabilityType.NONE) {
             System.err.print("InvulnerabilityType cannot be NONE");

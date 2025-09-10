@@ -17,7 +17,7 @@ public class JumpState extends State {
 
     private static final double STRAFE_SPEED = 450.0f;
     private static final double JUMP_VELOCITY = 900.0f;
-    private static final double GRAVITY_ACCELERATION = -30.0f;
+    private static final double GRAVITY_ACCELERATION = -1800.0f;
 
     public JumpState(Player player) {
         super(player);
@@ -61,7 +61,7 @@ public class JumpState extends State {
         super.update();
         final double deltaTime = TimeHelper.getDeltaTime();
 
-        double newVelocityY = player.getVelocityY() - GRAVITY_ACCELERATION;
+        double newVelocityY = player.getVelocityY() - GRAVITY_ACCELERATION * deltaTime;
         player.setVelocityY(newVelocityY);
 
         if (newVelocityY > 0.0f) {
