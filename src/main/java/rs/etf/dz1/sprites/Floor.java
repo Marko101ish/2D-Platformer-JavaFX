@@ -51,6 +51,7 @@ public class Floor extends Sprite {
             floorBlock.getTransforms().add(scale);
             getChildren().add(floorBlock);
             floorBlocks[blockIndex] = floorBlock;
+            floorBlock.initOldBounds();
         }
     }
 
@@ -60,7 +61,7 @@ public class Floor extends Sprite {
 
         for (int holeIndex = 0; holeIndex < holes.size(); ++holeIndex) {
             int oldHoleCol = holes.get(holeIndex).intValue();
-            holes.set(holeIndex, holes.get(holeIndex) - (Main.OBJECT_SPEED / blockSize * TimeHelper.getDeltaTime()));
+            holes.set(holeIndex, holes.get(holeIndex) - (100.0 / blockSize * TimeHelper.getDeltaTime()));
             int currHoleCol = holes.get(holeIndex).intValue();
 
             if (oldHoleCol == currHoleCol) {
@@ -82,13 +83,15 @@ public class Floor extends Sprite {
                 floorBlocks[j].setVisible(false);
             }
 
-            System.out.println(currHoleCol);
-
             if (currHoleCol < 0) {
                 this.holes.clear();
                 this.holes.add((double) numBlocks - 1);
             }
         }
+    }
+
+    public FloorBlock[] getFloorBlocks() {
+        return floorBlocks;
     }
 
     public CollisionResult checkForGround(Sprite sprite) {

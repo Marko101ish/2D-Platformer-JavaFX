@@ -6,8 +6,6 @@
 package rs.etf.dz1.sprites.characters.playerstates;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.characters.Player;
 import rs.etf.dz1.utils.TimeHelper;
 
@@ -19,14 +17,11 @@ public class FallState extends State {
     private static final double STRAFE_SPEED = 450.0f;
     private static final double GRAVITY_ACCELERATION = -1800.0f;
 
-    boolean wasOnPlatform;
-
     public FallState(Player player) {
         super(player);
         player.setFillColor(Color.BLUE);
 
         player.setFalling(true);
-        wasOnPlatform = player.isOnPlatform();
     }
 
     @Override
@@ -70,20 +65,10 @@ public class FallState extends State {
         // Allowing the player to pass through a platform if coming from underneath it
         // player will collide with the platform only if
         // they were falling in the previous frame, and weren't in collision with a platform
-        if (player.isOnGround()) {
-//            Main.getInstance().pauseGame();
+        if (player.isOnGround() || player.isOnPlatform()) {
             player.setVelocityY(0);
             player.setFalling(false);
             player.stop();
-        }
-        else if (!wasOnPlatform && player.isOnPlatform()) {
-//            Main.getInstance().pauseGame();
-            player.setVelocityY(0);
-            player.setFalling(false);
-            player.stop();
-        }
-        else {
-            wasOnPlatform = player.isOnPlatform();
         }
     }
 

@@ -16,6 +16,7 @@ import javafx.scene.shape.Polygon;
 public class FloorBlock extends Sprite {
 
     public FloorBlock(double height) {
+        super();
         Rectangle background = new Rectangle(-0.5, -0.5, 1, height);
         background.setFill(Color.SIENNA);
         getChildren().add(background);

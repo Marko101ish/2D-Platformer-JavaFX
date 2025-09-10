@@ -45,7 +45,7 @@ public class IdleState extends State {
 
     @Override
     public void update() {
-        if (!player.isOnGround()) {
+        if (!player.isOnGround() && !player.isOnPlatform()) {
             player.fall();
         }
     }

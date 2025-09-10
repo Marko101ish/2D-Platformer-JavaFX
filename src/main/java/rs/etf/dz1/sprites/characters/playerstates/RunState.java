@@ -67,7 +67,7 @@ public class RunState extends State {
     public void update() {
         super.update();
 
-        if (!player.isOnGround()) {
+        if (!player.isOnGround() && !player.isOnPlatform()) {
             player.fall();
             return;
         }

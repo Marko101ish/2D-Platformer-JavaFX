@@ -41,7 +41,7 @@ public class Main extends Application implements EventHandler<Event> {
     public static final int WINDOW_HEIGHT = 720;
 
     public static final double PLAYABLE_AREA_MIN_X = 0.0;
-    public static final double PLAYABLE_AREA_MAX_X = 2 * Main.WINDOW_WIDTH;
+    public static final double PLAYABLE_AREA_MAX_X = Main.WINDOW_WIDTH;
 
     // How far can a player fall before they die
     public static final int FALL_DEATH_OFFSET = 100;

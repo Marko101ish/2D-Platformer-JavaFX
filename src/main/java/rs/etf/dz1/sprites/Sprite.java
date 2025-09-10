@@ -5,6 +5,7 @@
  */
 package rs.etf.dz1.sprites;
 
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import rs.etf.dz1.utils.IUpdatable;
 import rs.etf.dz1.utils.TimeHelper;
@@ -16,18 +17,28 @@ import rs.etf.dz1.utils.TimeHelper;
 public abstract class Sprite extends Group implements IUpdatable {
     protected double velocityX;
     protected double velocityY;
+    protected Bounds oldBounds;
 
     private boolean facingRight = true;
 
     public Sprite() {
-
+        oldBounds = getBoundsInParent();
     }
 
     public Sprite(boolean flipSpriteX) {
+        this();
         if (flipSpriteX) {
             facingRight = false;
             setScaleX(-getScaleX());
         }
+    }
+
+    public Bounds getOldBounds() {
+        return oldBounds;
+    }
+
+    public void initOldBounds() {
+        oldBounds = getBoundsInParent();
     }
 
     public double getVelocityX() {
@@ -84,6 +95,7 @@ public abstract class Sprite extends Group implements IUpdatable {
 
     // method should be redefined and called in Main.update() method to update the object status
     public void update() {
+        oldBounds = getBoundsInParent();
         final double deltaTime = TimeHelper.getDeltaTime();
         setTranslateX(getTranslateX() + getVelocityX() * deltaTime);
         setTranslateY(getTranslateY() + getVelocityY() * deltaTime);

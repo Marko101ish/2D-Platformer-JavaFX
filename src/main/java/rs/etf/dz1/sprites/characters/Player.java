@@ -9,6 +9,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -18,11 +19,17 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import rs.etf.dz1.main.Main;
 import rs.etf.dz1.sprites.Floor;
+import rs.etf.dz1.sprites.FloorBlock;
 import rs.etf.dz1.sprites.Platform;
+import rs.etf.dz1.sprites.Sprite;
 import rs.etf.dz1.sprites.characters.playerstates.*;
 import rs.etf.dz1.utils.InvulnerabilityType;
 import rs.etf.dz1.utils.collisions.CollisionHelper;
 import rs.etf.dz1.utils.collisions.CollisionResult;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -42,6 +49,7 @@ public class Player extends Character implements EventHandler<KeyEvent> {
     private boolean falling = false;
 
     public Player() {
+        super();
         getChildren().clear();
         body = new Circle(0, 0, 40);
         body.setFill(Color.YELLOW);
@@ -173,33 +181,10 @@ public class Player extends Character implements EventHandler<KeyEvent> {
         super.update();
         state.update();
 
-        Floor floor = Main.getInstance().getFloor();
-
-        CollisionResult groundCollision = floor.checkForGround(this);
-        onGround = groundCollision != null && groundCollision.isAbove();
-
-//        onPlatform = false;
-//        for (Platform platform : Main.getInstance().getPlatformManager().getOwnedSprites()) {
-//            CollisionResult collisionWithPlatform = CollisionHelper.checkCollision(this, platform);
-//            if (collisionWithPlatform.inCollision) {
-//                if(collisionWithPlatform.isBelow()) {
-//                    setVelocityY(0.0);
-//                }
-//                if(collisionWithPlatform.isLeft()) {
-//                    if(isGoingRight()) {
-//                        setVelocityX(0.0);
-//                    }
-//                }
-//                if(collisionWithPlatform.isRight()) {
-//                    if(isGoingLeft()) {
-//                        setVelocityX(0.0);
-//                    }
-//                }
-//
-//                onPlatform = true;
-//                break;
-//            }
-//        }
+        onGround = false;
+        checkFloorCollisions();
+        onPlatform = false;
+        checkPlatformCollisions();
 
         // Player stays inside the window
         setTranslateX(Math.clamp(getTranslateX(), Main.PLAYABLE_AREA_MIN_X, Main.PLAYABLE_AREA_MAX_X));
@@ -235,6 +220,68 @@ public class Player extends Character implements EventHandler<KeyEvent> {
             Main.getInstance().slowDownGame();
         } else if (event.getCode() == KeyCode.F2 && event.getEventType() == KeyEvent.KEY_PRESSED) {
             Main.getInstance().speedUpGame();
+        }
+    }
+
+    private void checkFloorCollisions() {
+        List<Sprite> allSprites = new ArrayList<>(Arrays.asList(Main.getInstance().getFloor().getFloorBlocks()));
+
+        Bounds newPlayerBounds = getBoundsInParent();
+        List<Sprite> collisionSprites = new ArrayList<>();
+        for (Sprite sprite : allSprites) {
+            if (!sprite.isVisible()) {
+                continue;
+            }
+            if (sprite.getBoundsInParent().intersects(newPlayerBounds)) {
+                collisionSprites.add(sprite);
+            }
+        }
+
+        for (Sprite sprite : collisionSprites) {
+            // collision below the player
+            Bounds newSpriteBounds = sprite.getBoundsInParent();
+            if (newPlayerBounds.getMaxY() >= newSpriteBounds.getMinY()
+                    && getOldBounds().getMaxY() <= sprite.getOldBounds().getMinY()) {
+                setTranslateY(newSpriteBounds.getMinY() - newPlayerBounds.getHeight() / 2.0);
+                newPlayerBounds = getBoundsInParent();
+                onGround = true;
+            }
+        }
+    }
+
+    private void checkPlatformCollisions() {
+        final double EPSILON = 0.001;
+        List<Platform> allSprites = Main.getInstance().getPlatformManager().getOwnedSprites();
+
+        Bounds newPlayerBounds = getBoundsInParent();
+        List<Sprite> collisionSprites = new ArrayList<>();
+        for (Sprite sprite : allSprites) {
+            if (sprite.getBoundsInParent().intersects(newPlayerBounds)) {
+                collisionSprites.add(sprite);
+            }
+        }
+
+        for (Sprite sprite : collisionSprites) {
+            // collision on the right of the player
+            Bounds newSpriteBounds = sprite.getBoundsInParent();
+            if (newPlayerBounds.getMaxX() >= newSpriteBounds.getMinX()
+            && getOldBounds().getMaxX() <= sprite.getOldBounds().getMinX()) {
+                setTranslateX(newSpriteBounds.getMinX() - newPlayerBounds.getWidth() / 2.0 - EPSILON);
+                newPlayerBounds = getBoundsInParent();
+            }
+            // collision on the left of the player
+            else if (newPlayerBounds.getMinX() <= newSpriteBounds.getMaxX()
+            && getOldBounds().getMinX() >= sprite.getOldBounds().getMaxX()) {
+                setTranslateX(newSpriteBounds.getMaxX() + newPlayerBounds.getWidth() / 2.0 + EPSILON);
+                newPlayerBounds = getBoundsInParent();
+            }
+            // collision below the player
+            else if (newPlayerBounds.getMaxY() >= newSpriteBounds.getMinY()
+            && getOldBounds().getMaxY() <= sprite.getOldBounds().getMinY()) {
+                setTranslateY(newSpriteBounds.getMinY() - newPlayerBounds.getHeight() / 2.0);
+                newPlayerBounds = getBoundsInParent();
+                onPlatform = true;
+            }
         }
     }
 }
