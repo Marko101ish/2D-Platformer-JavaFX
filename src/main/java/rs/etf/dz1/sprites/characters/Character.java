@@ -2,17 +2,17 @@ package rs.etf.dz1.sprites.characters;
 
 import javafx.animation.Animation;
 import javafx.scene.Node;
+import rs.etf.dz1.events.FXEvent;
 import rs.etf.dz1.sprites.Sprite;
 import rs.etf.dz1.utils.InvulnerabilityType;
 import rs.etf.dz1.utils.TimeHelper;
 
 public abstract class Character extends Sprite {
     private int health = 1;
-    private double invulnerabilityDuration = 0;
     private double invulnerabilityTimeLeft = 0;
     private InvulnerabilityType activeInvulnerability = InvulnerabilityType.NONE;
     private Animation invulnerabilityAnimation;
-    private Node invulnerabilityVisual;
+    private Node invulnerabilityFX;
 
     public Character() {
 
@@ -66,13 +66,17 @@ public abstract class Character extends Sprite {
     }
 
     public void die() {
-
+        invulnerabilityLostInternal();
     }
 
     @Override
     public void update() {
         super.update();
         final double deltaTime = TimeHelper.getDeltaTime();
+        if (invulnerabilityFX != null) {
+            invulnerabilityFX.setTranslateX(getTranslateX());
+            invulnerabilityFX.setTranslateY(getTranslateY());
+        }
 
         invulnerabilityTimeLeft -= deltaTime;
         if (invulnerabilityTimeLeft <= 0) {
@@ -90,19 +94,19 @@ public abstract class Character extends Sprite {
         this.invulnerabilityAnimation = invulnerabilityAnimation;
     }
 
-    protected void setInvulnerabilityVisual(Node invulnerabilityVisual) {
-        this.invulnerabilityVisual = invulnerabilityVisual;
+    protected void setInvulnerabilityFX(Node invulnerabilityVisual) {
+        this.invulnerabilityFX = invulnerabilityVisual;
     }
 
     private void invulnerabilityGainedInternal(InvulnerabilityType type, double duration) {
-        invulnerabilityDuration = duration;
         invulnerabilityTimeLeft = duration;
         activeInvulnerability = type;
 
         onInvulnerabilityGained(activeInvulnerability, duration);
 
-        if (invulnerabilityVisual != null) {
-            getChildren().add(invulnerabilityVisual);
+        if (invulnerabilityFX != null) {
+            FXEvent fxAddedEvent = new FXEvent(FXEvent.ADD, invulnerabilityFX);
+            fireEvent(fxAddedEvent);
         }
         if (invulnerabilityAnimation != null) {
             invulnerabilityAnimation.play();
@@ -113,15 +117,15 @@ public abstract class Character extends Sprite {
         if (invulnerabilityAnimation != null) {
             invulnerabilityAnimation.stop();
         }
-        if (invulnerabilityVisual != null) {
-            getChildren().remove(invulnerabilityVisual);
+        if (invulnerabilityFX != null) {
+            FXEvent fxAddedEvent = new FXEvent(FXEvent.REMOVE, invulnerabilityFX);
+            fireEvent(fxAddedEvent);
         }
 
         onInvulnerabilityLost(activeInvulnerability);
 
         activeInvulnerability = InvulnerabilityType.NONE;
         invulnerabilityTimeLeft = 0;
-        invulnerabilityDuration = 0;
         invulnerabilityAnimation = null;
     }
 }

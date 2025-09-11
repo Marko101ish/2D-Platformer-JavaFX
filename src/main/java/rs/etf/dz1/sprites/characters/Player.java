@@ -103,6 +103,7 @@ public class Player extends Character implements EventHandler<KeyEvent> {
 
     @Override
     public void die() {
+        super.die();
         Main.getInstance().pauseGame();
         Main.getInstance().getSoundManager().playPlayerDeathSound();
         state = new DeadState(this);
@@ -157,7 +158,7 @@ public class Player extends Character implements EventHandler<KeyEvent> {
             Timeline immunityAnimation = new Timeline(kfin0, kfin1);
             immunityAnimation.setCycleCount(Timeline.INDEFINITE);
 
-            setInvulnerabilityVisual(invulnerabilityCircle);
+            setInvulnerabilityFX(invulnerabilityCircle);
             setInvulnerabilityAnimation(immunityAnimation);
 
             Main.getInstance().getSoundManager().playImmunityGainedSound();

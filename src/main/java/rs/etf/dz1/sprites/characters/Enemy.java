@@ -152,6 +152,7 @@ public class Enemy extends Character {
 
     @Override
     public void die() {
+        super.die();
         Main.getInstance().getSoundManager().playEnemyDeathSound();
     }
 }

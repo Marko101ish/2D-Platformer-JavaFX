@@ -11,10 +11,12 @@ import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import rs.etf.dz1.cameras.Camera;
+import rs.etf.dz1.events.FXEvent;
 import rs.etf.dz1.events.PlayerDiedEvent;
 import rs.etf.dz1.managers.*;
 import rs.etf.dz1.managers.sound.SoundManager;
@@ -74,6 +76,7 @@ public class Main extends Application implements EventHandler<Event> {
     private Group floorLayer;
     private Group characterLayer;
     private Group playerLayer;
+    private Group fxLayer;
     private Group uiLayer;
 
     private Player player;
@@ -228,10 +231,12 @@ public class Main extends Application implements EventHandler<Event> {
         floorLayer = new Group();
         characterLayer = new Group();
         playerLayer = new Group();
+        fxLayer = new Group();
         camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
         camera.getChildren().add(floorLayer);
         camera.getChildren().add(characterLayer);
         camera.getChildren().add(playerLayer);
+        camera.getChildren().add(fxLayer);
 
         // Foreground
         uiLayer = new Group();
@@ -255,6 +260,7 @@ public class Main extends Application implements EventHandler<Event> {
         root.getChildren().add(uiLayer);
 
         root.addEventHandler(PlayerDiedEvent.PLAYER_DIED_EVENT, this);
+        root.addEventHandler(FXEvent.ANY, this);
 
         primaryStage.setTitle(TITLE);
         primaryStage.setScene(scene);
@@ -333,6 +339,15 @@ public class Main extends Application implements EventHandler<Event> {
             }
             else {
                 gameOver();
+            }
+        }
+        if (event instanceof FXEvent) {
+            Node fxNode = ((FXEvent) event).fxNode;
+            if (event.getEventType() == FXEvent.ADD) {
+                fxLayer.getChildren().add(fxNode);
+            }
+            else {
+                fxLayer.getChildren().remove(fxNode);
             }
 
         }

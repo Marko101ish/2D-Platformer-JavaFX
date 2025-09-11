@@ -37,7 +37,8 @@ public class Floor extends Sprite {
         Scale scale = new Scale(blockSize, blockSize);
         Translate translate = new Translate(0, Main.WINDOW_HEIGHT - blockSize / 2.);
 
-        this.numBlocks = (floorEnd - floorStart) / blockSize;
+        // +1 to ensure full coverage
+        this.numBlocks = (floorEnd - floorStart) / blockSize + 1;
         this.holes.add((double) numBlocks - 1);
 
         floorBlocks = new FloorBlock[numBlocks];
