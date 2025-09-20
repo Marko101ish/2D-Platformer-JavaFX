@@ -5,5 +5,5 @@ module rs.etf.dz1 {
 
     requires javafx.media;
 
-    exports rs.etf.dz1.main;
+    exports main;
 }
