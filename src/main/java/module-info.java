@@ -1,4 +1,4 @@
-module rs.etf.dz1 {
+module com.marko.platformerjavafx {
     requires javafx.controls;
 
     requires javafx.graphics;
