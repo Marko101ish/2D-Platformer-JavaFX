@@ -62,7 +62,7 @@ public class Main extends Application implements EventHandler<Event> {
 
     public static final String TITLE = "Platformer";
 
-    public static final double TIME_TO_LIVE_S = 60.0;
+    public static final double TIME_TO_LIVE_S = 120.0;
     public static final double RESPAWN_INVULNERABILITY_DURATION = 3.0;
 
     private static Main instance;

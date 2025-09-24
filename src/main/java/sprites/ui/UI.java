@@ -35,7 +35,7 @@ public class UI extends Sprite {
         Font uiFont = new Font(MAX_FONT_SIZE);
 
         gameTimeLabel = new Label();
-        gameTimeLabel.setTranslateX(width / 2.0);
+        gameTimeLabel.setTranslateX(width / 2.0 - 50.0);
         gameTimeLabel.setTranslateY(TOP_MARGIN);
         gameTimeLabel.setAlignment(Pos.CENTER);
         gameTimeLabel.setFont(uiFont);
