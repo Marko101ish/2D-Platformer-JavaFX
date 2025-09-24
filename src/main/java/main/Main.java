@@ -37,7 +37,7 @@ import utils.TimeHelper;
 // --enable-native-access=javafx.media
 // --sun-misc-unsafe-memory-access=allow
 
-public class Main extends Application implements EventHandler<Event> {
+public class Main extends Application {
 
     public static final int WINDOW_WIDTH = 1280;
     public static final int WINDOW_HEIGHT = 720;
@@ -259,8 +259,8 @@ public class Main extends Application implements EventHandler<Event> {
         // Foreground
         root.getChildren().add(uiLayer);
 
-        root.addEventHandler(PlayerDiedEvent.PLAYER_DIED_EVENT, this);
-        root.addEventHandler(FXEvent.ANY, this);
+        root.addEventHandler(PlayerDiedEvent.PLAYER_DIED_EVENT, this::onPlayerDied);
+        root.addEventHandler(FXEvent.ANY, this::onFXEvent);
 
         primaryStage.setTitle(TITLE);
         primaryStage.setScene(scene);
@@ -327,29 +327,26 @@ public class Main extends Application implements EventHandler<Event> {
         System.exit(0);
     }
 
-    @Override
-    public void handle(Event event) {
-        if (event instanceof PlayerDiedEvent) {
-            if (--livesLeft > 0) {
-                spawnPlayer();
+    private void onPlayerDied(PlayerDiedEvent event) {
+        if (--livesLeft > 0) {
+            spawnPlayer();
 
-                player.giveInvulnerability(InvulnerabilityType.RESPAWN, RESPAWN_INVULNERABILITY_DURATION);
+            player.giveInvulnerability(InvulnerabilityType.RESPAWN, RESPAWN_INVULNERABILITY_DURATION);
 
-                resumeGame();
-            }
-            else {
-                gameOver();
-            }
+            resumeGame();
         }
-        if (event instanceof FXEvent) {
-            Node fxNode = ((FXEvent) event).fxNode;
-            if (event.getEventType() == FXEvent.ADD) {
-                fxLayer.getChildren().add(fxNode);
-            }
-            else {
-                fxLayer.getChildren().remove(fxNode);
-            }
+        else {
+            gameOver();
+        }
+    }
 
+    private void onFXEvent(FXEvent event) {
+        Node fxNode = event.fxNode;
+        if (event.getEventType() == FXEvent.ADD) {
+            fxLayer.getChildren().add(fxNode);
+        }
+        else {
+            fxLayer.getChildren().remove(fxNode);
         }
     }
 }
