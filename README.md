@@ -8,12 +8,12 @@ Collect coins to boost your score, jump on enemies to defeat them and look for s
 <img width="1277" height="720" alt="Screenshot_20260614_162801" src="https://github.com/user-attachments/assets/846825c7-668c-4ac9-9970-1251a1122293" />
 
 Controls:
-Arrows - movement
-Space - jump
-1 - fixed camera
-2 - camera follows the player
-F1 - slow down the game
-F2 - speed up the game
+- Arrows - movement
+- Space - jump
+- 1 - fixed camera
+- 2 - camera follows the player
+- F1 - slow down the game
+- F2 - speed up the game
 
 Implemented features:
 - State based Player character
