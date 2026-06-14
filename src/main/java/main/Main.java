@@ -177,7 +177,6 @@ public class Main extends Application {
 
                 // Proper delta time calculation
                 double deltaTime = deltaNanoTime / 1_000_000_000.0;
-                deltaTime = 1./60.0;
                 deltaTime *= timeMultiplier;
                 TimeHelper.setDeltaTime(deltaTime);
 
