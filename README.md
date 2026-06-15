@@ -1,4 +1,4 @@
-2D Platformer game made in JavaFX for a Computer Graphics course
+# 2D Platformer game made in JavaFX for a Computer Graphics course
 
 Endless platformer with randomly generated enemies and pickups.
 
